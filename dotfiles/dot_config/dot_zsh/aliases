@@ -1,0 +1,74 @@
+# keep dot files in git
+alias config='/usr/bin/git --git-dir=/Users/scott/.cfg/ --work-tree=/Users/scott'
+alias cfg='/usr/bin/git --git-dir=/Users/scott/.cfg/ --work-tree=/Users/scott'
+
+alias cls=clear
+
+# docker stuff
+alias d-c=docker-compose
+
+# rancher desktop / nerdctl
+alias nctl=nerdctl
+alias n=nerdctl
+alias nk="nerdctl --namespace=k8s.io $1"
+alias nerd=nerdctl
+
+# kubectl
+alias k=kubectl
+
+# vim
+alias v=nvim
+alias vi=nvim
+alias vim=nvim
+alias nvimconfig="nvim ~/.config/nvim/init.vim"
+
+alias zrc="source ~/.zshrc"
+
+# port checking
+checkPort() {
+  lsof -t -i:$argv[1]
+}
+
+alias cport=checkPort
+
+killPort() {
+  kill -9 (lsof -t -i:$argv[1])
+}
+
+alias kport=killPort
+
+# ssh useful commands and shortcuts
+sshAddKey() {
+  ssh-keygen -t rsa -C $argv
+}
+
+alias sshkey=sshAddKey
+
+sshStart() {
+  eval ssh-agent -s
+  ssh-add ~/.ssh/$argv[1]
+}
+
+alias sshuser=sshStart
+
+alias sshpingg="ssh -T git@github.com"
+
+alias src="cd ~/src"
+
+alias resrc="source ~/.zshrc"
+alias editalias="nvim ~/.zsh/aliases"
+
+# SSH stuff
+# connect to the Polygon integration server via my server in digital ocean
+alias integration="ssh -A -J root@64.227.47.140 zkevm@34.175.214.161"
+
+# replace cd with z
+alias cd=z
+alias cdi=zi
+
+# replace cat with bat
+alias cat=bat
+
+# gvm useful bits
+alias go120="gvm use go1.20 --default"
+alias go123="gvm use go1.23 --default"
