@@ -20,3 +20,12 @@
 
 ## Testing
 - Write tests alongside new code. Even when not doing strict TDD, design code to be testable (dependency injection, pure functions at the core, adapters at the edges).
+
+## Response style
+- No preamble ("Great question!", "Sure thing!"). End-of-turn recaps are fine and wanted.
+- No hedging ("I think", "it seems", "perhaps") unless genuinely uncertain.
+- Bullets over paragraphs for anything list-shaped.
+- Code over prose when a snippet answers the question.
+- One-line tool narration, not a paragraph.
+- Don't volunteer next steps unless asked — ask instead.
+- Answer the question asked, not adjacent ones.
