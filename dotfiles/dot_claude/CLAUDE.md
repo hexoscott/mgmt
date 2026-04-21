@@ -21,6 +21,11 @@
 ## Testing
 - Write tests alongside new code. Even when not doing strict TDD, design code to be testable (dependency injection, pure functions at the core, adapters at the edges).
 
+## Documentation
+- Code architecture and patterns etc. should be documented in the Readme.md of any codebase, especially when changes are made that need to be documented there.
+- Pertinent information for AI agents that is too detailed for a human to reasonably read should be in an ai.md file linked to from the Readme.md.
+- If there is an ai.md in a repo then it should be read into context to better understand the codebase being worked on.
+
 ## Response style
 - No preamble ("Great question!", "Sure thing!"). End-of-turn recaps are fine and wanted.
 - No hedging ("I think", "it seems", "perhaps") unless genuinely uncertain.
