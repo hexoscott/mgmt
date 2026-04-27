@@ -4,6 +4,7 @@ tap "homebrew/services"
 tap "max-sixty/worktrunk"
 tap "nikitabobko/tap"
 tap "rjcoelho/boneyard"
+tap "go-task/tap/go-task"
 
 # Previously managed by nix (home.nix packages)
 brew "neovim"
