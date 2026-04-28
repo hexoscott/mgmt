@@ -151,7 +151,8 @@ eval "$(starship init zsh)"
 source <(kurtosis completion zsh)
 compdef _kurtosis kurtosis
 
-eval "$(zoxide init zsh)"
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit && compinit
 
 export PATH="$PATH:/Users/scott/.nix-profile/bin"
 
@@ -164,3 +165,5 @@ export PATH="$HOME/.local/bin:$PATH"
 # volta stuff
 export PATH="$HOME/.volta/bin:$PATH"
 PATH="$HOME/.volta/bin:$PATH"
+
+eval "$(zoxide init zsh)"
