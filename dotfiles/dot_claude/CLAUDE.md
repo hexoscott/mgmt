@@ -10,7 +10,7 @@
 - **TypeScript + React** for UI work — lean on the ecosystem rather than reinventing.
 
 ## UI
-- For non-flashy UI (tables, forms, data display, admin-style surfaces), use [shadcn/ui](https://ui.shadcn.com/) components.
+- Use [shadcn/ui](https://ui.shadcn.com/) components for anything that you can as a preference.
 
 ## Architecture
 - Favour hexagonal / clean architecture with a ports-and-adapters style. Keep domain logic independent of frameworks, DBs, and transports; adapters plug in at the edges.
@@ -20,6 +20,7 @@
 
 ## Testing
 - Write tests alongside new code. Even when not doing strict TDD, design code to be testable (dependency injection, pure functions at the core, adapters at the edges).
+- Try as best as possible to create integration tests that talk to real databases both locally and in CI.
 
 ## Documentation
 - Code architecture and patterns etc. should be documented in the Readme.md of any codebase, especially when changes are made that need to be documented there.
@@ -34,3 +35,4 @@
 - One-line tool narration, not a paragraph.
 - Don't volunteer next steps unless asked — ask instead.
 - Answer the question asked, not adjacent ones.
+- Feel free to constructively criticise my suggestions, do not assume I'm right.
