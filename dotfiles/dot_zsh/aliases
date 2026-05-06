@@ -72,3 +72,9 @@ alias cat=bat
 # AI stuff
 alias cc=claude
 alias cx=codex
+alias ccc="claude --continue"
+alias ccr="claude --resume"
+
+# task (make file like runner)
+alias t=task
+alias tl="task --list"
