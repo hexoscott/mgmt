@@ -19,7 +19,7 @@
 # ==========================
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
-font-family = Hack
+font-family = JetBrainsMonoNL Nerd Font Mono
 # window-padding-x = 2
 #
 # # Spacing around the equals sign does not matter.
