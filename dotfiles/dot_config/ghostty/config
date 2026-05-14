@@ -20,7 +20,7 @@
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
 font-family = JetBrainsMonoNL Nerd Font Mono
-font-size = 14
+font-size = 13
 font-thicken = true
 font-thicken-strength = 1
 adjust-cell-height = 1
