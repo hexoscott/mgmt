@@ -20,5 +20,8 @@
       }
     }
   },
-  "effortLevel": "xhigh"
+  "effortLevel": "xhigh",
+  "skipWorkflowUsageWarning": true,
+  "agentPushNotifEnabled": true,
+  "model": "claude-fable-5[1m]"
 }

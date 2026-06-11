@@ -27,6 +27,9 @@ adjust-cell-height = 1
 # window-padding-x = 2N
 background-opacity = 0.90
 background-blur = 16
+
+cursor-style = underline
+shell-integration-features = no-cursor
 #
 # # Spacing around the equals sign does not matter.
 # # All of these are identical:
