@@ -57,6 +57,9 @@ theme = Nvim Dark
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/glitchy.glsl
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/bloom.glsl
 
+# distinct modified Enter for tmux/Codex/Claude multiline input
+keybind = shift+enter=text:\x1b[13;2u
+
 # split management
 keybind = ctrl+a>r=new_split:right
 keybind = ctrl+a>v=new_split:down

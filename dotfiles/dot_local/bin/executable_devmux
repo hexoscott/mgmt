@@ -1,0 +1,181 @@
+#!/bin/zsh
+set -eu
+
+# Edit this file over time to define the workspaces you want devmux to open.
+# Each repo gets one tmux window with a full-height work pane on the left and
+# two stacked panes on the right for agents and running commands.
+SESSION=${DEVMUX_SESSION:-devmux}
+TMUX_SOCKET=${DEVMUX_TMUX_SOCKET:-}
+SOURCE_FILE=${DEVMUX_SOURCE_FILE:-$HOME/mgmt/dotfiles/dot_local/bin/executable_devmux}
+
+repos=(
+  "$HOME/src/hexoscott/tessera"
+  "$HOME/src/hexoscott/domain-chaser"
+  "$HOME/src/hexoscott/domain-analysis"
+  "$HOME/src/hexoscott/domain-data"
+  "$HOME/src/prefixsystems"
+  "$HOME/src/revittco/ebl"
+  "$HOME/src/revittco/saviour"
+  "$HOME/src/revittco/halotraffic"
+)
+
+# Optional commands to start in panes when creating a fresh session.
+# Example:
+#   DEVMUX_AGENT_CMD=codex devmux rebuild
+#   DEVMUX_RUN_CMD='npm run dev' devmux rebuild
+AGENT_CMD=${DEVMUX_AGENT_CMD:-}
+RUN_CMD=${DEVMUX_RUN_CMD:-}
+
+usage() {
+  cat <<EOF
+Usage: devmux [command]
+
+Commands:
+  open       Attach to the devmux session, creating it if needed. Default.
+  rebuild    Kill and recreate the devmux session from this file.
+  kill       Kill the devmux session.
+  list       Print the repo workspaces configured in this file.
+  edit       Open this file in nvim, or EDITOR if set.
+  help       Show this help.
+
+Environment:
+  DEVMUX_SESSION    Session name. Default: devmux
+  DEVMUX_AGENT_CMD  Command to run in each agent pane on rebuild.
+  DEVMUX_RUN_CMD    Command to run in each run pane on rebuild.
+  DEVMUX_TMUX_SOCKET Use a named tmux socket. Useful for testing.
+  DEVMUX_NO_ATTACH   Set to 1 to create/rebuild without attaching.
+  DEVMUX_SOURCE_FILE Override the file opened by devmux edit.
+EOF
+}
+
+tmux_cmd() {
+  if [[ -n "$TMUX_SOCKET" ]]; then
+    command tmux -L "$TMUX_SOCKET" "$@"
+  else
+    command tmux "$@"
+  fi
+}
+
+window_name_for() {
+  local repo=$1
+  basename "$repo" | tr ' ' '-'
+}
+
+valid_repos() {
+  local repo
+  for repo in "${repos[@]}"; do
+    if [[ -d "$repo" ]]; then
+      print -r -- "$repo"
+    else
+      print -u2 "devmux: skipping missing repo: $repo"
+    fi
+  done
+}
+
+send_optional_command() {
+  local target=$1
+  local command=$2
+
+  if [[ -n "$command" ]]; then
+    tmux_cmd send-keys -t "$target" "$command" C-m
+  fi
+}
+
+setup_window() {
+  local window=$1
+  local repo=$2
+
+  tmux_cmd split-window -t "$window.1" -h -p 35 -c "$repo"
+  tmux_cmd split-window -t "$window.2" -v -p 50 -c "$repo"
+  tmux_cmd select-pane -t "$window.1"
+
+  send_optional_command "$window.2" "$AGENT_CMD"
+  send_optional_command "$window.3" "$RUN_CMD"
+}
+
+create_session() {
+  local configured_repos
+  configured_repos=("${(@f)$(valid_repos)}")
+
+  if (( ${#configured_repos[@]} == 0 )); then
+    print -u2 "devmux: no configured repos exist on this machine"
+    exit 1
+  fi
+
+  local first_repo=${configured_repos[1]}
+  local first_name
+  first_name=$(window_name_for "$first_repo")
+
+  tmux_cmd new-session -d -s "$SESSION" -n "$first_name" -c "$first_repo"
+  setup_window "$SESSION:1" "$first_repo"
+
+  local index=2
+  local repo name
+  for repo in "${configured_repos[@]:1}"; do
+    name=$(window_name_for "$repo")
+    tmux_cmd new-window -t "$SESSION:" -n "$name" -c "$repo"
+    setup_window "$SESSION:$index" "$repo"
+    index=$((index + 1))
+  done
+
+  tmux_cmd select-window -t "$SESSION:1"
+}
+
+attach_or_switch() {
+  if [[ "${DEVMUX_NO_ATTACH:-0}" == 1 ]]; then
+    return
+  fi
+
+  if [[ -n "${TMUX:-}" ]]; then
+    tmux_cmd switch-client -t "$SESSION"
+  else
+    tmux_cmd attach-session -t "$SESSION"
+  fi
+}
+
+require_tmux() {
+  if ! command -v tmux >/dev/null 2>&1; then
+    print -u2 "devmux: tmux is not installed"
+    exit 127
+  fi
+}
+
+command=${1:-open}
+
+case "$command" in
+  open)
+    require_tmux
+    if ! tmux_cmd has-session -t "$SESSION" 2>/dev/null; then
+      create_session
+    fi
+    attach_or_switch
+    ;;
+  rebuild)
+    require_tmux
+    if tmux_cmd has-session -t "$SESSION" 2>/dev/null; then
+      tmux_cmd kill-session -t "$SESSION"
+    fi
+    create_session
+    attach_or_switch
+    ;;
+  kill)
+    require_tmux
+    if tmux_cmd has-session -t "$SESSION" 2>/dev/null; then
+      tmux_cmd kill-session -t "$SESSION"
+    fi
+    ;;
+  list)
+    valid_repos
+    ;;
+  edit)
+    "${EDITOR:-nvim}" "$SOURCE_FILE"
+    ;;
+  help|--help|-h)
+    usage
+    ;;
+  *)
+    print -u2 "devmux: unknown command: $command"
+    usage >&2
+    exit 2
+    ;;
+esac
