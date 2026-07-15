@@ -14,9 +14,17 @@
 
 ## Architecture
 - Favour hexagonal / clean architecture with a ports-and-adapters style. Keep domain logic independent of frameworks, DBs, and transports; adapters plug in at the edges.
+- TDD is to be used to improve code maintenance and find edge cases/bugs early.
+
+## Code Approach
+- You should use TDD style approach to coding in all cases unless there is a worth exception at which point it should be flagged to me.
+
+## Bugs
+- When a bug is identified a test should be written showing the failure state first before the fix is in place.  Feel free to use a stash and re-apply to show cleanly that the code fix does indeed rectify the issue.
 
 ## Data
 - SQLite is the default datastore for small apps. Reach for something else only when there's a real reason.
+- PostGres is the larger database of choice by default unless another technology makes more sense, then flag it.
 
 ## Testing
 - Write tests alongside new code. Even when not doing strict TDD, design code to be testable (dependency injection, pure functions at the core, adapters at the edges).
