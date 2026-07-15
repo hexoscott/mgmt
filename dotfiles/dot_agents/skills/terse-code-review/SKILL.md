@@ -15,6 +15,8 @@ You should step through each commit between the two SHA points and gather the de
 
 Now we have a section for the PR or bare SHA if there is no PR number in the commit title you should add in code review findings with sub sections from blocking, critical, high, medium, low, nit. 
 
+As you review new commits please put the PR numbers at the top of the file created in ascending order, not all commits are merged in order so it is useful to see them in order at the top of the file as a summary.
+
 # Code review reporting style
 
 Write the final review as a terse, evidence-backed handoff.
