@@ -45,6 +45,8 @@ devmux edit     # edit the launcher config in nvim, or EDITOR if set
 Tmux prefixes are `C-a` and backtick. The old `§` key is also accepted as a
 compatibility prefix. Use prefix + `z` to toggle zoom for the active pane; the
 active window tab shows `ZOOM` while the current window is zoomed.
+Panes use double-line borders with compact headers so each pane reads as a
+separate framed workspace.
 Tmux extended keys are enabled, and Ghostty maps Shift+Enter to CSI-U modified
 Enter so terminal apps can distinguish it from plain Enter.
 
