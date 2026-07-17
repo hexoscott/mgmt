@@ -51,7 +51,8 @@ shell-integration-features = no-cursor
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-theme = Nvim Dark
+theme = Nightfox
+
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/bettercr.glsl
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/dither.glsl
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/glitchy.glsl
