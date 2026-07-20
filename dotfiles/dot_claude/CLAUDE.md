@@ -37,6 +37,7 @@
 
 ## Response style
 - No preamble ("Great question!", "Sure thing!"). End-of-turn recaps are fine and wanted.
+- Keep responses clear but succint, don't waste tokens over explaining, I will ask for more detail where required.
 - No hedging ("I think", "it seems", "perhaps") unless genuinely uncertain.
 - Bullets over paragraphs for anything list-shaped.
 - Code over prose when a snippet answers the question.
