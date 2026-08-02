@@ -1,8 +1,9 @@
 # mgmt
 
-Replaces the old nix/home-manager setup. Two tools:
+Replaces the old nix/home-manager setup. Three tools:
 
-- **Homebrew + Brewfile** — packages (CLI + GUI).
+- **Homebrew + Brewfile** — macOS apps, services, libraries, and system tools.
+- **mise + mise.toml** — versioned CLI tools.
 - **chezmoi** — dotfiles in `dotfiles/` (chezmoi source dir, `dot_` prefix = `.` in `$HOME`).
 
 ## Fresh machine
@@ -12,7 +13,7 @@ cd ~/mgmt
 ./bootstrap.sh
 ```
 
-Installs Homebrew if missing, runs `brew bundle`, writes `~/.config/chezmoi/chezmoi.toml` pointing here, then `chezmoi apply`.
+Installs Homebrew and mise if missing, installs both dependency sets, writes `~/.config/chezmoi/chezmoi.toml` pointing here, then runs `chezmoi apply`.
 
 ## Day-to-day
 
@@ -25,6 +26,9 @@ chezmoi diff                      # preview changes
 brew bundle dump --file=Brewfile --force   # refresh Brewfile from current brew state
 brew bundle --file=Brewfile                # install anything missing
 brew bundle cleanup --file=Brewfile        # list things installed but not in Brewfile
+mise use --pin --path ~/mgmt/mise.toml <tool>@<version>
+chezmoi apply ~/.mise.toml                   # update the global copy
+mise install                                # install pinned CLI versions
 ```
 
 ## devmux
@@ -58,10 +62,12 @@ optional pane startup commands with `DEVMUX_AGENT_CMD` and `DEVMUX_RUN_CMD`.
 ```
 mgmt/
 ├── Brewfile          # taps, brews, casks
-├── bootstrap.sh      # install brew + chezmoi, apply both
+├── mise.toml         # pinned CLI tools
+├── bootstrap.sh      # install brew + mise + chezmoi, apply dotfiles
 ├── install-devmux.sh # apply only tmux + devmux
 └── dotfiles/         # chezmoi source (sourceDir in chezmoi.toml)
     ├── dot_zshrc                   → ~/.zshrc
+    ├── dot_mise.toml.tmpl          → ~/.mise.toml
     ├── dot_tmux.conf               → ~/.tmux.conf
     ├── dot_local/bin/executable_devmux → ~/.local/bin/devmux
     ├── dot_aerospace.toml          → ~/.aerospace.toml

@@ -71,6 +71,9 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+export MISE_GLOBAL_CONFIG_FILE="$HOME/.mise.toml"
+eval "$(~/.local/bin/mise activate zsh)"
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -133,7 +136,6 @@ export PATH="/Users/scott/.rd/bin:$PATH"
 # fzf to use ripgrep
 export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export PATH="/opt/homebrew/opt/go@1.19/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -169,4 +171,3 @@ PATH="$HOME/.volta/bin:$PATH"
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
 eval "$(zoxide init zsh)"
-eval "$(~/.local/bin/mise activate zsh)"

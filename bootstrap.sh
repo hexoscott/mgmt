@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap a fresh Mac: Homebrew + Brewfile + chezmoi apply.
+# Bootstrap a fresh Mac: Homebrew + Brewfile + mise + chezmoi apply.
 # Idempotent — safe to re-run.
 
 set -euo pipefail
@@ -25,11 +25,15 @@ fi
 say "Installing packages from Brewfile"
 brew bundle --file="${MGMT_DIR}/Brewfile"
 
-# 3. chezmoi (brew bundle installs it, but double-check)
-if ! command -v chezmoi >/dev/null 2>&1; then
-  say "Installing chezmoi"
-  brew install chezmoi
+# 3. mise
+if ! command -v mise >/dev/null 2>&1; then
+  say "Installing mise"
+  curl https://mise.run | sh
 fi
+export PATH="${HOME}/.local/bin:${PATH}"
+export MISE_GLOBAL_CONFIG_FILE="${MGMT_DIR}/mise.toml"
+say "Installing versioned tools"
+mise install
 
 # 4. Point chezmoi at this repo's dotfiles and apply
 CHEZMOI_CFG_DIR="${HOME}/.config/chezmoi"
@@ -40,6 +44,6 @@ sourceDir = "${MGMT_DIR}/dotfiles"
 EOF
 
 say "Applying chezmoi dotfiles"
-chezmoi apply
+mise exec -- chezmoi apply
 
-say "Done. Review any diff with: chezmoi diff"
+say "Done. Review any diff with: mise exec -- chezmoi diff"

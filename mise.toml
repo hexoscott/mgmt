@@ -1,0 +1,33 @@
+# Exact versions migrated from Brewfile on 2026-08-02.
+# Keep macOS apps, services, libraries, FFmpeg, and Sphinx in Homebrew.
+
+[tools]
+go = "1.26.2"
+python = ["3.10.20", "3.11.15", "3.9.25"]
+"aqua:aws/aws-cli" = "2.34.36"
+"aqua:sharkdp/bat" = "0.26.1"
+"aqua:nextest-rs/nextest/cargo-nextest" = "0.9.133"
+"aqua:twpayne/chezmoi" = "2.70.2"
+"aqua:schollz/croc" = "10.4.2"
+"aqua:sharkdp/fd" = "10.4.2"
+"aqua:junegunn/fzf" = "0.71.0"
+"aqua:cli/cli" = "2.95.0"
+"aqua:fullstorydev/grpcurl" = "1.9.3"
+"go:github.com/rakyll/hey" = "0.1.5"
+"go:github.com/ipfs/ipget" = "0.13.0"
+"aqua:josephburnett/jd" = "2.5.0"
+"aqua:jqlang/jq" = "1.8.1"
+"aqua:grafana/k6" = "1.7.1"
+"aqua:FiloSottile/mkcert" = "1.4.4"
+"aqua:neovim/neovim" = "0.12.2"
+"aqua:pypa/pipx" = "1.11.1"
+"aqua:protocolbuffers/protobuf-go/protoc-gen-go" = "1.36.11"
+"aqua:grpc/grpc-go/protoc-gen-go-grpc" = "1.6.1"
+"aqua:BurntSushi/ripgrep" = "15.1.0"
+"github:ethereum/solidity" = "0.8.34"
+"aqua:starship/starship" = "1.25.0"
+"aqua:tmux/tmux-builds" = "3.6a"
+"aqua:tsenart/vegeta" = "12.13.0"
+"aqua:max-sixty/worktrunk" = "0.44.0"
+"aqua:mikefarah/yq" = "4.53.2"
+"aqua:ajeetdsouza/zoxide" = "0.9.9"
