@@ -25,8 +25,8 @@ font-thicken = true
 font-thicken-strength = 1
 adjust-cell-height = 1
 # window-padding-x = 2N
-background-opacity = 0.90
-background-blur = 16
+background-opacity = 0.95
+background-blur = 20
 
 cursor-style = underline
 shell-integration-features = no-cursor
