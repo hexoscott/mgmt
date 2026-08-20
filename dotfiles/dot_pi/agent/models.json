@@ -1,0 +1,11 @@
+{
+  "providers": {
+    "fieldfare": {
+      "baseUrl": "http://127.0.0.1:8000/v1",
+      "api": "openai-completions",
+      "models": [
+        { "id": "gemma-4-26b-a4b-it" }
+      ]
+    }
+  }
+}

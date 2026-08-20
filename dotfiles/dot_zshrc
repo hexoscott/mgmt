@@ -171,3 +171,6 @@ PATH="$HOME/.volta/bin:$PATH"
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
 eval "$(zoxide init zsh)"
+
+# Added by cua-driver-rs installer — see https://github.com/trycua/cua
+export PATH="/Users/scott/.local/bin:$PATH"
