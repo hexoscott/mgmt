@@ -4,3 +4,7 @@ prefix = "§"
 
 [ui]
 show_agent_labels_on_pane_borders = false
+
+[theme]
+name = "terminal"
+auto_switch = false
