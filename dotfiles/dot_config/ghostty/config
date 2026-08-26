@@ -19,7 +19,7 @@
 # ==========================
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
-font-family = CommitMono Nerd Font
+font-family = Monaspace Argon
 font-size = 13
 font-thicken = true
 font-thicken-strength = 1
