@@ -1,0 +1,7 @@
+## Local-model working rules
+
+- Make the smallest diff that satisfies the task; do not touch unrelated code.
+- Edit only files named by the task. Do not re-read files already read this session.
+- Prefer rewriting a small file over repeated edit attempts.
+- After editing, run one verification command, then stop.
+- Remove debug prints before finishing.

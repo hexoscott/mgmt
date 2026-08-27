@@ -1,6 +1,24 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "lmstudio/qwen/qwen3.8-27b",
+  "agent": {
+    "build": {
+      "prompt": "{file:./prompts/local.txt}",
+      "reasoningEffort": "medium",
+      "permission": {
+        "glob": "deny",
+        "grep": "deny",
+        "list": "deny",
+        "task": "deny",
+        "todowrite": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "lsp": "deny",
+        "skill": "deny",
+        "question": "deny"
+      }
+    }
+  },
   "provider": {
     "lmstudio": {
       "npm": "@ai-sdk/openai-compatible",
@@ -13,7 +31,12 @@
           "name": "Gemma 4 31B (local)"
         },
         "qwen/qwen3.8-27b": {
-          "name": "Qwen 3.8 27B (local)"
+          "name": "Qwen 3.8 27B (local)",
+          "reasoning": true,
+          "limit": {
+            "context": 100000,
+            "output": 32000
+          }
         },
         "qwen3.6-27b-mlx": {
           "name": "Qwen 3.6 27B MLX (local)"
