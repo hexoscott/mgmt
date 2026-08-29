@@ -1,0 +1,8 @@
+{
+  "lastChangelogVersion": "0.84.2",
+  "theme": "dark",
+  "defaultProvider": "turbofieldfare",
+  "defaultModel": "gemma-4-26b-a4b-it",
+  "defaultThinkingLevel": "off",
+  "httpIdleTimeoutMs": 0
+}

@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "lmstudio/qwen/qwen3.8-27b",
+  "model": "turbofieldfare/gemma-4-26b-a4b-it",
   "agent": {
     "build": {
       "prompt": "{file:./prompts/local.txt}",
@@ -20,6 +20,22 @@
     }
   },
   "provider": {
+    "turbofieldfare": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Turbo Fieldfare (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8000/v1"
+      },
+      "models": {
+        "gemma-4-26b-a4b-it": {
+          "name": "Gemma 4 26B-A4B IT",
+          "limit": {
+            "context": 65536,
+            "output": 4096
+          }
+        }
+      }
+    },
     "lmstudio": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "LM Studio (local)",
