@@ -3,6 +3,7 @@
 ## Tools
 - Prefer `rg` (ripgrep) over `grep`.
 - `wt` is [worktrunk](https://github.com/max-sixty/worktrunk), aliased for managing git worktrees — use it when juggling parallel branches or isolating work.
+- Browser automation: use [brw](https://brw.donworks.co.uk/) via the `brw` MCP tools (`mcp__brw__*`, see the `brw` skill). Never claude-in-chrome — it's uninstalled.
 
 ## Languages
 - **Go** is the first-class language — default to it for services, CLIs, and anything non-trivial.
