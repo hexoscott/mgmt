@@ -63,6 +63,12 @@ trust_level = "trusted"
 [projects."/Users/scott/src/controlloop"]
 trust_level = "trusted"
 
+[projects."/Users/scott/src/hexoscott/tessera"]
+trust_level = "trusted"
+
+[projects."/Users/scott/src/hexoscott/tessera-marketing"]
+trust_level = "trusted"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
@@ -99,7 +105,7 @@ args = ["--mcp", "--http", "off", "--upstream-http", "http://127.0.0.1:17310"]
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 "gpt-5.6-sol" = 3
-gpt-6-astra = 2
+gpt-6-astra = 4
 
 [marketplaces.ponytail]
 last_updated = "2026-08-08T20:27:42Z"
