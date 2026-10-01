@@ -31,6 +31,23 @@ chezmoi apply ~/.mise.toml                   # update the global copy
 mise install                                # install pinned CLI versions
 ```
 
+To update Pi to the latest release, install it, and sync the global pin:
+
+```sh
+cd ~/mgmt
+mise upgrade --bump aqua:earendil-works/pi
+chezmoi apply ~/.mise.toml
+```
+
+If Pi advertises an update that mise skips because of its 24-hour release-age
+delay, bypass the delay for that update only:
+
+```sh
+cd ~/mgmt
+mise upgrade --bump --minimum-release-age 0 aqua:earendil-works/pi
+chezmoi apply ~/.mise.toml
+```
+
 The bootstrap scripts treat existing managed files under `~/.claude` and
 `~/.codex` as authoritative, including skills and instructions:
 `chezmoi re-add` copies their local changes back
