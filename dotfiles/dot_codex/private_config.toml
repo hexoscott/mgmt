@@ -69,28 +69,37 @@ trust_level = "trusted"
 [projects."/Users/scott/src/hexoscott/tessera-marketing"]
 trust_level = "trusted"
 
+[projects."/Users/scott/src/don-works/maix"]
+trust_level = "trusted"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
 [mcp_servers.node_repl]
+args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
-startup_timeout_sec = 120.0
+startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.818.41705"
-BROWSER_USE_TINYSKY_ENABLED = "0"
-CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
-CODEX_HOME = "/Users/scott/.codex"
-NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
-NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
-NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
 NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/scott/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/scott/.codex/plugins/cache/openai-bundled/browser/26.818.41705/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+CODEX_HOME = "/Users/scott/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.911.61220"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/scott/.codex/plugins/cache/openai-bundled/browser/26.911.61220/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+SKY_CUA_SERVICE_PATH = "/Users/scott/.codex/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+
+[mcp_servers.brw]
+command = "/usr/local/bin/brwd"
+args = ["--mcp", "--http", "off", "--upstream-http", "http://127.0.0.1:17310"]
 
 [mcp_servers.computer-use]
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
@@ -98,14 +107,14 @@ args = ["mcp"]
 cwd = "."
 enabled = false
 
-[mcp_servers.brw]
-command = "/usr/local/bin/brwd"
-args = ["--mcp", "--http", "off", "--upstream-http", "http://127.0.0.1:17310"]
+[tui]
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 "gpt-5.6-sol" = 3
 gpt-6-astra = 4
+"gpt-6.1-sol" = 4
 
 [marketplaces.ponytail]
 last_updated = "2026-08-08T20:27:42Z"
@@ -125,9 +134,6 @@ source = "/Users/scott/.cache/codex-runtimes/codex-primary-runtime/plugins/opena
 enabled = true
 
 [plugins."codex-app-tools@openai-bundled"]
-enabled = true
-
-[plugins."sites@openai-bundled"]
 enabled = true
 
 [plugins."browser@openai-bundled"]
@@ -151,6 +157,12 @@ enabled = true
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
 [hooks.state]
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:session_start:0:0"]
@@ -168,8 +180,11 @@ trusted_hash = "sha256:ef4bc30f02e63509fea82418a4b80d00b74de5ce660a3ace0f53491ba
 [features]
 hooks = true
 js_repl = false
+memories = true
+memory_tool = true
 
 [desktop]
 followUpQueueMode = "queue"
 dock-icon-preference = "codex-system"
 keepRemoteControlAwakeWhilePluggedIn = true
+conversationDetailMode = "STEPS_PROSE"

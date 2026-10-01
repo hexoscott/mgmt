@@ -22,11 +22,11 @@
 font-family = JetbrainsMono Nerd Font
 font-size = 13
 font-thicken = true
-font-thicken-strength = 1
+font-thicken-strength = 100
 adjust-cell-height = 30%
 # window-padding-x = 2N
-background-opacity = 0.95
-background-blur = 20
+background-opacity = 1
+background-blur = 100
 
 cursor-style = underline
 shell-integration-features = no-cursor
@@ -51,7 +51,7 @@ shell-integration-features = no-cursor
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-theme = Nightfox
+theme = Ayu Mirage
 
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/bettercr.glsl
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/dither.glsl

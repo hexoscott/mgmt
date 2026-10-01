@@ -35,15 +35,5 @@ export MISE_GLOBAL_CONFIG_FILE="${MGMT_DIR}/mise.toml"
 say "Installing versioned tools"
 mise install
 
-# 4. Point chezmoi at this repo's dotfiles and apply
-CHEZMOI_CFG_DIR="${HOME}/.config/chezmoi"
-CHEZMOI_CFG="${CHEZMOI_CFG_DIR}/chezmoi.toml"
-mkdir -p "${CHEZMOI_CFG_DIR}"
-cat > "${CHEZMOI_CFG}" <<EOF
-sourceDir = "${MGMT_DIR}/dotfiles"
-EOF
-
-say "Applying chezmoi dotfiles"
-mise exec -- chezmoi apply
-
-say "Done. Review any diff with: mise exec -- chezmoi diff"
+# 4. Sync home-owned agent files, then apply dotfiles
+mise exec -- bash "${MGMT_DIR}/bootstrap-chezmoi.sh"

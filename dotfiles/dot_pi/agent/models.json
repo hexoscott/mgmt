@@ -22,7 +22,7 @@
     "local": {
       "baseUrl": "http://127.0.0.1:1234/v1",
       "api": "openai-completions",
-      "apiKey": "local",
+      "apiKey": "lmstudio",
       "compat": {
         "supportsDeveloperRole": false,
         "supportsReasoningEffort": true,
@@ -30,8 +30,13 @@
         "maxTokensField": "max_tokens"
       },
       "models": [
-        { "id": "qwen3.8-27b", "name": "qwen-local-3.8", "reasoning": true,
-          "contextWindow": 100000, "maxTokens": 32000 }
+        { 
+          "id": "qwen3.8-27b", 
+          "name": "qwen-local-3.8", 
+          "reasoning": true,
+          "contextWindow": 100000, 
+          "maxTokens": 32000 
+        }
       ]
     }
   }

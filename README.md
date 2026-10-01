@@ -19,7 +19,7 @@ Installs Homebrew and mise if missing, installs both dependency sets, writes `~/
 
 ```sh
 # After editing files in ~/mgmt/dotfiles
-chezmoi apply                     # write to $HOME
+./bootstrap-chezmoi.sh            # sync agent files from home, then apply
 chezmoi diff                      # preview changes
 
 # After installing new stuff
@@ -30,6 +30,15 @@ mise use --pin --path ~/mgmt/mise.toml <tool>@<version>
 chezmoi apply ~/.mise.toml                   # update the global copy
 mise install                                # install pinned CLI versions
 ```
+
+The bootstrap scripts treat existing managed files under `~/.claude` and
+`~/.codex` as authoritative, including skills and instructions:
+`chezmoi re-add` copies their local changes back
+into `dotfiles/` before applying. Edit these files in your home directory;
+review and commit the resulting repo changes as usual. Unmanaged files (including
+new skills) are not imported; add new skills explicitly with `chezmoi add`.
+Missing files are installed from the repo on a fresh machine.
+Direct `chezmoi apply` or `chezmoi update` bypasses this sync step.
 
 ## devmux
 
