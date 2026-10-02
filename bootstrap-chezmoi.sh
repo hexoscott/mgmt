@@ -29,8 +29,8 @@ EOF
 
 # Harnesses and other tools edit these files in place; home is authoritative.
 # re-add updates only managed files, leaving new runtime files untracked.
-say "Syncing managed Claude and Codex files from home"
-chezmoi re-add "${HOME}/.claude" "${HOME}/.codex"
+say "Syncing managed Claude, Codex and Pi files from home"
+chezmoi re-add "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.pi"
 
 say "Applying chezmoi dotfiles"
 chezmoi apply

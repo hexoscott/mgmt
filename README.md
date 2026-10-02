@@ -48,8 +48,8 @@ mise upgrade --bump --minimum-release-age 0 aqua:earendil-works/pi
 chezmoi apply ~/.mise.toml
 ```
 
-The bootstrap scripts treat existing managed files under `~/.claude` and
-`~/.codex` as authoritative, including skills and instructions:
+The bootstrap scripts treat existing managed files under `~/.claude`,
+`~/.codex` and `~/.pi` as authoritative, including skills, instructions and extensions:
 `chezmoi re-add` copies their local changes back
 into `dotfiles/` before applying. Edit these files in your home directory;
 review and commit the resulting repo changes as usual. Unmanaged files (including

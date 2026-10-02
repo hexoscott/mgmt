@@ -21,6 +21,9 @@ with tempfile.TemporaryDirectory() as temporary:
         ".claude/skills/example/SKILL.md": "Claude skill\n",
         ".codex/config.toml": "# repo\n",
         ".codex/skills/example/SKILL.md": "Codex skill\n",
+        ".pi/agent/settings.json": "{}\n",
+        ".pi/agent/models.json": "{}\n",
+        ".pi/agent/extensions/example/index.ts": "// Pi extension\n",
     }
     for name, content in files.items():
         path = source / name.replace(".", "dot_", 1)
@@ -40,6 +43,9 @@ with tempfile.TemporaryDirectory() as temporary:
     (home / ".claude/auth.json").write_text("unmanaged\n")
     (home / ".codex/sessions").mkdir()
     (home / ".codex/sessions/session.json").write_text("unmanaged\n")
+    (home / ".pi/agent/auth.json").write_text("unmanaged\n")
+    (home / ".pi/agent/sessions").mkdir()
+    (home / ".pi/agent/sessions/session.json").write_text("unmanaged\n")
     (source / "dot_unrelated").write_text("updated repo-owned\n")
     run()  # Home edits win, while unrelated dotfiles still apply normally.
     run()  # Repeat runs are safe.
@@ -48,5 +54,7 @@ with tempfile.TemporaryDirectory() as temporary:
         assert (home / name).read_text() == content + "\n"
     assert not (source / "dot_claude/auth.json").exists()
     assert not (source / "dot_codex/sessions").exists()
+    assert not (source / "dot_pi/agent/auth.json").exists()
+    assert not (source / "dot_pi/agent/sessions").exists()
     assert (home / ".unrelated").read_text() == "updated repo-owned\n"
     print("PASS: fresh install, configs, instructions, skills, repeat runs, unmanaged files")
