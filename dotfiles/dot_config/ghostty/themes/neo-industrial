@@ -1,0 +1,41 @@
+# Neo-Industrial Theme for Ghostty
+# Style: Industrial steel, concrete grays, rust, and high-visibility safety neon
+
+# Core Palette
+background = #1a1c1e
+foreground = #dcdfe4
+cursor-color = #00ff99
+
+# ANSI Colors
+# Black (Dark Slate & Matte)
+palette = 0=#121417
+palette = 8=#3f444a
+
+# Red (Industrial Rust & Hazard)
+palette = 1=#ff4a4a
+palette = 9=#ff6b6b
+
+# Green (Electric Safety / Matrix Neon)
+palette = 2=#00ff88
+palette = 10=#33ff99
+
+# Yellow (Caution Tape Yellow)
+palette = 3=#e5c07b
+palette = 11=#f3cc80
+
+# Blue (Steel Blue)
+palette = 4=#4ba3e3
+palette = 12=#6cb6eb
+
+# Magenta (Anodized Violet)
+palette = 5=#c678dd
+palette = 13=#d59edd
+
+# Cyan (Cooling Liquid / Laser Cyan)
+palette = 6=#00e5ff
+palette = 14=#33eaff
+
+# White (Raw Aluminum)
+palette = 7=#abb2bf
+palette = 15=#ffffff
+

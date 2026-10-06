@@ -19,7 +19,7 @@
 # ==========================
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
-font-family = JetbrainsMono Nerd Font
+font-family = Geist Mono
 font-size = 13
 font-thicken = true
 font-thicken-strength = 100
@@ -51,7 +51,7 @@ shell-integration-features = no-cursor
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-theme = Ayu Mirage
+theme = neo-industrial
 
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/bettercr.glsl
 #custom-shader = /Users/scott/src/hackr-sh/ghostty-shaders/dither.glsl
