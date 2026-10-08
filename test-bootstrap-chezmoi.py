@@ -12,8 +12,9 @@ with tempfile.TemporaryDirectory() as temporary:
     repo, home = root / "repo", root / "home"
     repo.mkdir()
     home.mkdir()
-    script = repo / "bootstrap-chezmoi.sh"
-    shutil.copyfile(Path(__file__).with_name(script.name), script)
+    script, sync_script = repo / "bootstrap-chezmoi.sh", repo / "bootstrap-sync.sh"
+    for copied in (script, sync_script):
+        shutil.copyfile(Path(__file__).with_name(copied.name), copied)
     source = repo / "dotfiles"
     files = {
         ".claude/settings.json": "{}\n",
@@ -33,8 +34,8 @@ with tempfile.TemporaryDirectory() as temporary:
     env = {**os.environ, "HOME": str(home), "XDG_CONFIG_HOME": str(home / ".config"),
            "XDG_CACHE_HOME": str(home / ".cache"), "XDG_DATA_HOME": str(home / ".local/share")}
 
-    def run():
-        subprocess.run(["bash", str(script)], env=env, check=True, capture_output=True)
+    def run(target=script):
+        subprocess.run(["bash", str(target)], env=env, check=True, capture_output=True)
 
     run()  # Fresh machine: missing directories and files are installed.
     for name, content in files.items():
@@ -57,4 +58,8 @@ with tempfile.TemporaryDirectory() as temporary:
     assert not (source / "dot_pi/agent/auth.json").exists()
     assert not (source / "dot_pi/agent/sessions").exists()
     assert (home / ".unrelated").read_text() == "updated repo-owned\n"
-    print("PASS: fresh install, configs, instructions, skills, repeat runs, unmanaged files")
+
+    (home / ".claude/CLAUDE.md").write_text("Synced alone\n")
+    run(sync_script)  # Sync runs standalone and only copies home edits into the repo.
+    assert (source / "dot_claude/CLAUDE.md").read_text() == "Synced alone\n"
+    print("PASS: fresh install, configs, instructions, skills, repeat runs, unmanaged files, standalone sync")

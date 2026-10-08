@@ -20,6 +20,7 @@ Installs Homebrew and mise if missing, installs both dependency sets, writes `~/
 ```sh
 # After editing files in ~/mgmt/dotfiles
 ./bootstrap-chezmoi.sh            # sync agent files from home, then apply
+./bootstrap-sync.sh               # only sync agent files from home into dotfiles/
 chezmoi diff                      # preview changes
 
 # After installing new stuff
@@ -48,10 +49,10 @@ mise upgrade --bump --minimum-release-age 0 aqua:earendil-works/pi
 chezmoi apply ~/.mise.toml
 ```
 
-The bootstrap scripts treat existing managed files under `~/.claude`,
-`~/.codex` and `~/.pi` as authoritative, including skills, instructions and extensions:
+`bootstrap-sync.sh` treats existing managed files under the directories in its
+`HOME_OWNED_DIRS` list (`~/.claude`, `~/.codex`, `~/.pi`) as authoritative, including skills, instructions and extensions:
 `chezmoi re-add` copies their local changes back
-into `dotfiles/` before applying. Edit these files in your home directory;
+into `dotfiles/`; `bootstrap-chezmoi.sh` runs it before applying. Edit these files in your home directory;
 review and commit the resulting repo changes as usual. Unmanaged files (including
 new skills) are not imported; add new skills explicitly with `chezmoi add`.
 Missing files are installed from the repo on a fresh machine.
@@ -90,6 +91,7 @@ mgmt/
 ├── Brewfile          # taps, brews, casks
 ├── mise.toml         # pinned CLI tools
 ├── bootstrap.sh      # install brew + mise + chezmoi, apply dotfiles
+├── bootstrap-sync.sh # copy home-owned agent files back into dotfiles/
 ├── install-devmux.sh # apply only tmux + devmux
 └── dotfiles/         # chezmoi source (sourceDir in chezmoi.toml)
     ├── dot_zshrc                   → ~/.zshrc

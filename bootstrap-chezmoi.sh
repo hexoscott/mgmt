@@ -27,10 +27,7 @@ cat > "${CHEZMOI_CFG}" <<EOF
 sourceDir = "${MGMT_DIR}/dotfiles"
 EOF
 
-# Harnesses and other tools edit these files in place; home is authoritative.
-# re-add updates only managed files, leaving new runtime files untracked.
-say "Syncing managed Claude, Codex and Pi files from home"
-chezmoi re-add "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.pi"
+bash "${MGMT_DIR}/bootstrap-sync.sh"
 
 say "Applying chezmoi dotfiles"
 chezmoi apply
