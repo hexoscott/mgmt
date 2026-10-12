@@ -1,11 +1,11 @@
 onboarding = false
 [keys]
-prefix = "§"
+prefix = ["§", "`"]
 
 [ui]
 show_agent_labels_on_pane_borders = false
 
 agent_panel_sort = "spaces"
 [theme]
-name = "kanagawa"
+name = "gruvbox"
 auto_switch = false
