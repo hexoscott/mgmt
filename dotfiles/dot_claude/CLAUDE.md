@@ -7,6 +7,7 @@
 - Preferred stack is Go and Typescript with Python to supplement simple little things.
 - React for the UI.
 - Favour hexagonal or ports and adapters architecture - write code like a top level senior developer would.
+- Aim for deep modules where related code lives together with a thin interface over the top of it for callers.
 - Use TDD to prove code on the backend and frontend.
 - Keep Readme documents simple to understand - supplementary files can be linked to it where needed.
 - Use Task instead of tools like makefiles - build/test/local dev commands live here.
