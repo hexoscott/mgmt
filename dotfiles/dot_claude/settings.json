@@ -9,20 +9,20 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      },
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {
             "type": "command",
             "command": "bash '/Users/scott/.claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
           }
         ]
       }
@@ -209,5 +209,6 @@
       "**Trusted repo**: /Users/scott/src/hexoscott/tessera (github.com:hexoscott/tessera.git) — private repo; confidential local material is fine to keep here but secrets/credentials are never cleared into it by virtue of visibility",
       "**Org-specific CLIs**: None configured — project-local tooling in routine use: `task`, `go`, `wt` (worktrunk), `mkcert`, `goose`, `docker`"
     ]
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }
