@@ -8,6 +8,7 @@
 - React for the UI.
 - Favour hexagonal or ports and adapters architecture - write code like a top level senior developer would.
 - Use TDD to prove code on the backend and frontend.
+- Before treating a batch of work as ready to commit, run the `pre-commit-review` skill and fix what it finds; a trivial change with no behaviour change skips it.
 - Keep Readme documents simple to understand - supplementary files can be linked to it where needed.
 - Use Task instead of tools like makefiles - build/test/local dev commands live here.
 - Keep code formatted and cleanly organised so that it can be parsed easily later.

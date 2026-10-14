@@ -166,17 +166,44 @@ enabled = true
 [hooks.state]
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:session_start:0:0"]
-trusted_hash = "sha256:7ee5d5ae1f4a9e55f1f429f2960c2f9f32293f198c0e8e2e42b2fb3b4eeda142"
+trusted_hash = "sha256:55a39116e94ed8399271043701d3e9b8859aee77c30ef85529e7eab067d8acd9"
 enabled = true
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:user_prompt_submit:0:0"]
-trusted_hash = "sha256:8c9efc5a5e649c8cdca3f0b7bf4cba81d9717d1bc930c7dbc18b6efd66c7c58c"
+trusted_hash = "sha256:29dcb3bf3cd3d77af301058521d2fd4e414c523345f8fe70942f7f30027acc94"
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:subagent_start:0:0"]
-trusted_hash = "sha256:7954d675ef3bafd5e5a6073ae51d7de57a08f21340f241c332f99078e955675d"
+trusted_hash = "sha256:6e210f506560ddd14e490c7dd80623572d504b8f0cfcf8c64c4d4c2ab4d23ae1"
 
 [hooks.state."/Users/scott/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:05e6d8b7a037032726008b8c9d46f0398e327ae18bd9ea826745ab2de0beb96b"
+
+[hooks.state."/Users/scott/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:89353540103d18934f6410dcd87e6005696acbe38f5342ea043a8a1e5dcb2483"
+
+[hooks.state."/Users/scott/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:028844309c28a0a07e88395b3fd08c0ffd8536ca382f0303736cc7b9f38162c6"
+
+[hooks.state."/Users/scott/.codex/hooks.json:session_start:1:0"]
 trusted_hash = "sha256:ef4bc30f02e63509fea82418a4b80d00b74de5ce660a3ace0f53491ba46158fc"
+
+[hooks.state."/Users/scott/.codex/hooks.json:session_end:0:0"]
+trusted_hash = "sha256:36fdd601223a5a470a5a4b69a03d6a51b361e8cb8a503475f914be33ed19d6a6"
+
+[hooks.state."/Users/scott/.codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:ff4c98b3095aaba47057475efe3594fd7b03851788941df8ff5f3e2e2c321c19"
+
+[hooks.state."/Users/scott/.codex/hooks.json:subagent_start:0:0"]
+trusted_hash = "sha256:b3d65f071b7424ab463f30c0ec8efa47c7f830fb05a8557f43f26cfc9cee43e2"
+
+[hooks.state."/Users/scott/.codex/hooks.json:subagent_stop:0:0"]
+trusted_hash = "sha256:36d497a06533f3949e71f1c15d0a1eeae4d94515e8ac1e1a2378d8db7b67a325"
+
+[hooks.state."/Users/scott/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:6bdd9f3772d9f855176eb3e55690e0a548255b45aa31ba549444dbde5308dca5"
+
+[hooks.state."/Users/scott/.codex/hooks.json:interrupt:0:0"]
+trusted_hash = "sha256:3321c4e8bd20dfe46dff6362e467cd648982b6dea825af82253cf8f30a980c46"
 
 [features]
 hooks = true
