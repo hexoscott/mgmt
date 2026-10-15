@@ -1,6 +1,7 @@
 # Global preferences
 
 ## Main rules
+- Care deeply about the code base and its long term health like a senior engineer would, always consider the quality of the overall codebase when making changes.
 - Favour code clarity over documentation or comments - write code that is easy to interpret by AI and humans later without needing supplementary documentation.
 - Things that should live in docs: architectural decisions and what alternatives were considered, domain language to understand concepts in the code (captured as a glossary), a general layout document explaining what lives where in the codebase to speed up spelunking and onboarding.
 - Prefer clarity over terseness - no cute functions that can't be reasoned about later - where that isn't possible use succint comments.
