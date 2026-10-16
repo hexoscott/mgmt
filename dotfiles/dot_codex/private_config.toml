@@ -72,6 +72,9 @@ trust_level = "trusted"
 [projects."/Users/scott/src/don-works/maix"]
 trust_level = "trusted"
 
+[projects."/Users/scott/src/hexoscott/work-hunt"]
+trust_level = "trusted"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
@@ -176,7 +179,7 @@ trusted_hash = "sha256:29dcb3bf3cd3d77af301058521d2fd4e414c523345f8fe70942f7f300
 trusted_hash = "sha256:6e210f506560ddd14e490c7dd80623572d504b8f0cfcf8c64c4d4c2ab4d23ae1"
 
 [hooks.state."/Users/scott/.codex/hooks.json:session_start:0:0"]
-trusted_hash = "sha256:05e6d8b7a037032726008b8c9d46f0398e327ae18bd9ea826745ab2de0beb96b"
+trusted_hash = "sha256:ef4bc30f02e63509fea82418a4b80d00b74de5ce660a3ace0f53491ba46158fc"
 
 [hooks.state."/Users/scott/.codex/hooks.json:pre_tool_use:0:0"]
 trusted_hash = "sha256:89353540103d18934f6410dcd87e6005696acbe38f5342ea043a8a1e5dcb2483"
@@ -185,7 +188,7 @@ trusted_hash = "sha256:89353540103d18934f6410dcd87e6005696acbe38f5342ea043a8a1e5
 trusted_hash = "sha256:028844309c28a0a07e88395b3fd08c0ffd8536ca382f0303736cc7b9f38162c6"
 
 [hooks.state."/Users/scott/.codex/hooks.json:session_start:1:0"]
-trusted_hash = "sha256:ef4bc30f02e63509fea82418a4b80d00b74de5ce660a3ace0f53491ba46158fc"
+trusted_hash = "sha256:05e6d8b7a037032726008b8c9d46f0398e327ae18bd9ea826745ab2de0beb96b"
 
 [hooks.state."/Users/scott/.codex/hooks.json:session_end:0:0"]
 trusted_hash = "sha256:36fdd601223a5a470a5a4b69a03d6a51b361e8cb8a503475f914be33ed19d6a6"

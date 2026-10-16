@@ -1,175 +1,139 @@
 ---
 name: review-rounds
-description: "Use when the user asks for a deep or thorough code review pass, a review that runs until it stops finding things, review rounds, a multi-round or multi-agent review, or a pre-merge audit of a feature. Also use when they ask to review a diff, branch, PR or recent commits with more rigour than a single read — including phrases like 'go over this in phases', 'keep going until nothing new turns up', 'review until clean', or 'run a code review agent pass'. Covers dispatching scoped reviewer agents, triaging their findings, verifying claims before acting, mutation-testing assertions, and the two-consecutive-clean-rounds stopping gate. Not for a quick sanity read of a small diff."
+description: "Use when the user asks for a deep or thorough code review, review rounds, a review that runs until clean or until nothing new turns up, a multi-agent review, or a pre-merge audit of a feature, diff, branch, PR or recent commits. Covers the wide first sweep, scoped reviewer briefs, class-wide fixes, self-checking fixes before the next round, and the two-clean-rounds gate. Not for a quick sanity read of a small diff; one pass before a commit is `pre-commit-review`."
 user-invocable: true
 ---
 
-Runs a code review to a stopping condition rather than to a single pass. The
-method exists because the naive version fails in three specific ways: reviewers
-report defects that were already fixed, reviewers are sometimes wrong, and
-fixes introduce new defects at roughly the rate the original code did.
+Runs a code review to a stopping condition. Each round costs a reviewer
+dispatch, a wait and a triage, so the run is fast when every round finds
+everything it can and every fix arrives already checked. Past runs went 13 to
+100+ rounds for three reasons this method removes:
+
+- reviewers capped their reports and handed back a few findings each;
+- fixes landed one instance at a time and unchecked, so the next round's yield
+  was defects in the last round's fixes;
+- open-ended sweeps (every unguarded line) always found one more thing, so the
+  gate never closed.
 
 ## The gate
 
-Run rounds until **two consecutive rounds find nothing worth actioning**.
+Two consecutive rounds with no **blocking** finding, counted after the last
+blocking fix.
 
-- A round that finds something resets the count. Two clean rounds means two
-  clean rounds *after the last fix*, not two clean rounds total.
-- "Nothing worth actioning" is a judgement, not a vote count. A round reporting
-  only style preferences and speculative hardening is clean.
-- Tell the user which round you are on and what reset the count. If they asked
-  for the gate, they will want to know it has not been met.
+- **Blocking**: a concrete failure path: a specific input or interleaving
+  that gives a specific wrong result. Covers a wrong number a human acts on, a
+  tenant or permission leak, data loss, a crash, a migration that fails on
+  real data, a test that cannot fail on an invariant in the brief, and a
+  comment, doc or copy claim the code contradicts.
+- **Minor**: everything else, including hardening, style, an untested line
+  that no brief invariant depends on, and wording that is true but could be
+  clearer. Fix minors in the same batch or defer them. They never reset the
+  count.
 
-**Expect the later rounds to find defects in the earlier rounds' fixes.** This
-is the normal shape, not a sign something has gone wrong. From round 3 or so,
-point reviewers at the fix commits (`git diff HEAD~N..HEAD`) rather than at the
-original feature — that is the least-reviewed code in the tree, and it is where
-the findings actually are.
+Report the round number, the blocking count and what reset the gate. Stop early
+only if the user says so; if you stop before the gate is met, say so plainly
+and why.
 
-Stop early only if the user says so. If you stop before the gate is met, say
-plainly that it was not met and why you are stopping anyway.
+## Round 1: the wide sweep
 
-## Dispatching reviewers
+Dispatch every reviewer in one message so they run in parallel:
 
-Scope each agent to a **slice**, not to "the diff": store/data layer, HTTP and
-authorization, frontend, tests, one subsystem. Three or four scoped reviewers
-beat one broad one, and they can run in parallel.
+- **Slice reviewers**, 3 to 5: one per slice (store/data layer, HTTP and
+  authorization, frontend, migrations, one subsystem).
+- **One mutation reviewer**: every test the scope adds or changes, plus at
+  least one test per brief invariant. See [Mutation](#mutation).
+- **One claims reviewer**: every comment, doc line, UI string and commit
+  message sentence in scope that says what code does, checked against the code.
 
-Each brief must carry:
+## Briefs
 
-- The **exact diff range** and the files in scope.
-- The **domain invariants**, written as things to verify rather than facts to
-  assume ("X must never reach Y" not "X never reaches Y").
-- The instruction to **read current files, not just the diff**.
-- The instruction to **trace every finding to a concrete failure**: specific
-  input or interaction, specific wrong output. Anything that cannot be
-  substantiated that way is discarded.
-- An explicit **"nothing found" is the expected and most useful answer** — do
-  not pad. Without this, reviewers manufacture findings to look productive.
-- A list of **already-fixed items** by name, so they do not re-report them.
-- **Reply with findings in your final message**, under a character limit, no
-  "what's right" section. Otherwise reports arrive truncated with the findings
-  cut off, or padded with pages of verified-clean prose.
+Each brief carries:
 
-Reviewers commonly go idle without delivering. Message them to collect the
-report rather than assuming they found nothing.
+- the exact diff range and the files in scope;
+- the domain invariants, written as things to verify ("X must never reach Y");
+- read the current files, not just the diff;
+- read `~/.claude/skills/review-rounds/finding-classes.md` and apply every
+  class to the slice. Done when every file in the slice is read and every class
+  applied, not at the first few findings;
+- trace each finding to a concrete failure, discarding what can't be, and mark
+  it blocking or minor using the gate's definitions (paste them in);
+- **write every finding to `<scratchpad>/review/round-<N>-<slice>.md`**, one
+  entry each with severity, `file:line`, the failure, and the fix. There is no
+  cap on count and no "what's right" section. The final message gives the path
+  and the blocking/minor counts;
+- "nothing found" is a valid answer, and a padded finding costs a verification;
+- the items already fixed, deferred or rejected, so they aren't re-reported;
+- read-only: write nothing outside the scratchpad.
 
-## Verify before acting
+A reviewer that goes idle without writing its file has not finished. Message it
+to collect the report.
 
-Reviewers review a moving tree. **Re-check every claim against the current
-file before you act on it.** In practice a meaningful fraction of findings are
-already fixed, and some are simply wrong.
+## Triage and fix
 
-When two reviewers contradict each other, compute the answer yourself. When a
-reviewer's *diagnosis* is wrong but they have noticed a real inconsistency,
-fix the inconsistency the right way rather than the way they proposed — a
-reviewer saying "this fix was reverted" may actually be seeing an intentional
-change with a stale comment above it.
+Start on each reviewer's file as it lands rather than waiting for the slowest.
 
-Do not report a fix you have not verified. For behavioural fixes, write the
-failing test first, then fix, then confirm it passes. For anything subtle,
-revert the fix and confirm the test goes red.
+1. **Verify** every claim against the current file. Reviewers review a moving
+   tree, and some are simply wrong. Reject with what you computed. When two
+   reviewers contradict each other, compute the answer yourself. When a
+   diagnosis is wrong but the inconsistency is real, fix it the right way.
+2. **Fix the class, not the instance.** For each confirmed finding, search the
+   whole scope for the same pattern (the term, the type, the query shape, every
+   sibling projection, every comment describing the same rule) and fix every
+   instance in one change. A single-instance fix leaves the siblings for
+   the next round to find, one per round.
+3. **Test-first**: write a failing test, fix, see green. For anything subtle,
+   revert the fix and watch the test go red.
+4. **Self-check the batch** before the next round: run `pre-commit-review`
+   steps 1 to 3 on the fixes (mutate each new or changed test, check lock
+   changes both ways, check every claim). This catches defects in your own
+   fixes inside this round instead of costing the next one.
+5. **Commit** each coherent fix with a message saying what the defect was and
+   how it would have bitten. If fixes share a test file and can't be split
+   without a commit that fails its own tests, make one commit and describe all
+   of it.
 
-## The finding classes that actually recur
+## Round 2 onward
 
-Ranked by how often they turn up and how badly they hide.
+**Fix rounds** cover only what changed: `git diff <last-round-sha>..HEAD`
+plus the callers of every symbol it touches. Dispatch one reviewer on that diff
+and one mutation reviewer on the tests it touched. That is the least-reviewed
+code in the tree, and it is where the findings are.
 
-### 1. Tests that cannot fail
+When a fix round has no blocking finding, run a **confirmation round**: one
+fresh reviewer over the full original scope, with the full brief. If it is also
+clean, that makes two consecutive clean rounds and the gate is met. A blocking
+finding goes back to triage and the next round is a fix round.
 
-The dominant class, and the one that lets everything else through. Variants:
+## Convergence check
 
-- **The fixture could never produce the failure.** A leak assertion on a row
-  where the leaked field was always null; a "not valued" assertion on a fixture
-  where nothing was ever priced.
-- **Asserting the absence of something absent anyway.** Checking no "£"
-  renders, where the failing branch renders a skeleton that has no text at all.
-- **Asserting on literals a format string always contains.** The message
-  mentions every column name whatever it did, so the check passes for any
-  record at all.
-- **Passing for the wrong reason.** A 403 test using a principal that a
-  different, unrelated gate would refuse anyway.
-- **A wait that resolves too early.** Awaiting a static heading that renders
-  during the loading state, then asserting synchronously on data that has not
-  arrived. Passes alone, fails under full-suite load, on a different test each
-  run.
+At round 5, and every 5 rounds after, if the gate is not met, report the
+blocking count per round, split between original work and your own fixes, and
+ask the user whether to continue. Bring the diagnosis with it:
 
-**Find these by mutation.** Delete or invert the code the test covers and
-confirm the suite goes red. If it stays green, the test is decoration. This is
-the single highest-yield technique in the whole method and it is cheap against
-one file.
+- **Fix defects dominate**: the self-check is shallow or being skipped. Tighten
+  step 4 rather than running more rounds.
+- **New defects in the original work after round 3**: round 1 under-covered
+  something. Run one more wide sweep, briefed on the classes that keep turning
+  up.
+- **The same class keeps recurring**: its instances are being fixed one at a
+  time. Sweep the class once across the whole scope.
 
-### 2. Comment and copy drift after a behaviour change
+## Mutation
 
-A change alters what a term means; the surrounding comments, docs and UI copy
-keep asserting the old meaning. The real damage is downstream: **someone
-implements the comment.** Check every doc, struct comment and bit of user-facing
-copy that describes behaviour the diff changed, and check whether any consumer
-has coded against the stale description.
-
-### 3. Migrations
-
-- **`ADD CONSTRAINT CHECK` validates existing rows.** A constraint with no
-  preceding clean-up fails, rolls back and blocks the deploy on precisely the
-  databases holding the data it exists to prevent — and nowhere else, so it
-  passes everywhere you test it.
-- **Destructive clean-ups must record what they destroyed**, with ids, and the
-  record must cover *every* branch of the clean-up. Verify the branch the
-  migration exists for is actually included; it is often the one omitted,
-  because its rows do not appear in the obvious buckets.
-- **Backfills must not fabricate.** Prefer NULL, where the column has a defined
-  "unknown", over a clamped or borrowed value that looks plausible. Check the
-  backfill's own claim to be "invisible on the numbers" against the edge cases.
-- Down must be correct, and it usually cannot undo data loss — say so.
-
-### 4. Guards that bound the wrong thing
-
-Bounding two factors independently when the invariant is on their **product**.
-Any such pair either permits the pathological combination or forbids ordinary
-data, and often both at once. Also: check every ceiling against *real* data for
-each variant of the thing being bounded — a limit that is absurd for one unit
-may be ordinary for another.
-
-### 5. Error and recovery dead ends
-
-Clearing state on failure removes the controls that would retry. Check every
-recovery path leads somewhere recoverable, including the *second* failure —
-the intended recovery move often routes back to the query that just failed.
-
-### 6. Leaks through secondary projections
-
-A sensitive field added to one query leaks through every sibling path that
-shares the type: child lists, ancestor chains, barcode or lookup resolution,
-batch replays. When a field gains a gate, sweep every projection of that type
-and add one test asserting the invariant across all of them, rather than one
-test per instance.
-
-### 7. Audit and logging that records nothing
-
-`before, _ := Get(...)` keeps the **zero value** on failure and logs it as a
-real row of empty fields — indistinguishable from a row that genuinely said so.
-Read-before-mutate must actually read before the mutation, from a projection
-that carries the fields the entry exists to record.
-
-## Triage
-
-Fix / defer / reject, and say which:
-
-- **Fix** anything with a concrete failure path, however narrow, if the fix is
-  proportionate. Silent data loss, a wrong number a human will act on, and a
-  low-privilege user breaking a higher-privilege surface all rank above
-  cosmetic correctness.
-- **Defer** with a one-line reason the user can overrule.
-- **Reject** what you have verified is wrong, and say what you computed.
-
-Commit each coherent fix as it lands, with a message saying what the defect was
-and how it would have bitten — not just what changed. If several fixes share a
-test file and cannot be split without a commit that fails its own tests, make
-one commit and describe all of it rather than splitting badly or writing a
-message that covers only part of the work.
+- The target is bounded: tests the scope adds or changes, and the tests behind
+  each brief invariant. An unmutated line outside that target is a minor
+  finding. The bound is what lets the gate close.
+- Spawn the mutation reviewer with `isolation: "worktree"`, and commit first,
+  because the worktree is built from HEAD. A mutation reviewer that shares
+  your tree can restore over your edits.
+- Undo a mutation by copying the file aside and back. `git checkout` and
+  `git stash` on a file also discard the uncommitted work it holds.
+- A test only counts as red when it fails for the reason it exists.
+  `[build failed]` and Go's "no tests to run" both mean the check never ran.
 
 ## Reporting
 
-Give the user, per round: what was found, what you fixed, what you rejected and
-why, and whether the gate has been met. Distinguish defects in the original
-work from defects in your own fixes — the ratio is the signal for whether to
-keep going.
+Per round: blocking and minor counts, what you fixed, what you rejected and
+why, what you deferred and the reason, and the gate state. Separate defects in
+the original work from defects in your own fixes. That ratio is the signal for
+whether to keep going.
