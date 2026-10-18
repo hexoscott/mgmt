@@ -1,5 +1,7 @@
 # Global preferences
 
+Be extremely concise.  Sacrifice grammar for the sake of concision.
+
 ## Main rules
 - Favour code clarity over documentation or comments - write code that is easy to interpret by AI and humans later without needing supplementary documentation.
 - Things that should live in docs: architectural decisions and what alternatives were considered, domain language to understand concepts in the code (captured as a glossary), a general layout document explaining what lives where in the codebase to speed up spelunking and onboarding.
@@ -18,6 +20,3 @@
 - Prefer `rg` (ripgrep) over `grep`.
 - `wt` is [worktrunk](https://github.com/max-sixty/worktrunk), aliased for managing git worktrees — use it when juggling parallel branches or isolating work.
 - Browser automation: use [brw](https://brw.donworks.co.uk/) via the `brw` MCP tools (`mcp__brw__*`, see the `brw` skill). Never claude-in-chrome — it's uninstalled.
-
-## Response style
-Be extremely concise.  Sacrifice grammar for the sake of concision.
