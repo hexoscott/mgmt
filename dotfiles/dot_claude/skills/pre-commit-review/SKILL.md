@@ -55,8 +55,11 @@ continue), in a scratch test file that is deleted afterwards.
 For each new or changed comment, doc line and commit-message sentence that
 says what code does, read the code it describes and confirm it is true now.
 Weigh absolute words hardest: _every_, _never_, _only_, _all_, _always_. They
-are the claims most often false by one exception. Done when each claim is
-confirmed or corrected.
+are the claims most often false by one exception. When the batch changes
+what a term means (a unit, a cap, a status), grep the term repo-wide (README,
+docs, migrations, UI copy) and check every sentence stating the old meaning.
+Done when each claim is confirmed or corrected and each changed term is
+grepped.
 
 ## 4. One fresh-context reviewer
 

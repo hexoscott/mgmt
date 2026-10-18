@@ -80,3 +80,18 @@ not just the one in the diff.
 row of empty fields, indistinguishable from a row that genuinely said so.
 Read-before-mutate must actually read before the mutation, from a projection
 that carries the fields the entry exists to record.
+
+## 8. Lost updates from stale forms
+
+A form loaded before another user's edit re-sends every field it holds, not
+just the one the user touched, and overwrites the newer values. Fixing the
+field the finding names leaves every other field in the payload to be found
+one per round. Check every field the save path sends: send only changed
+fields, or compare a version on write.
+
+## 9. Sibling flows sharing a pattern
+
+Two screens or handlers that do the same job (receive, goods-in, produce)
+copy each other's patterns: a form lock, a double-tap guard, an async picker
+that can resolve stale. A fix to one flow leaves the defect in the others.
+Name every sibling flow and check each one for the pattern.
