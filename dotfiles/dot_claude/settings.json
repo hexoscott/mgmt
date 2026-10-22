@@ -25,6 +25,15 @@
             "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/scott/.claude/helpers/graft-hooks.cjs\" session-start",
+            "timeout": 8000
+          }
+        ]
       }
     ],
     "SessionEnd": [
@@ -33,6 +42,15 @@
           {
             "type": "command",
             "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/scott/.claude/helpers/graft-hooks.cjs\" session-end",
+            "timeout": 5000
           }
         ]
       }
@@ -45,6 +63,15 @@
             "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/scott/.claude/helpers/graft-hooks.cjs\" prompt",
+            "timeout": 15000
+          }
+        ]
       }
     ],
     "Stop": [
@@ -53,6 +80,15 @@
           {
             "type": "command",
             "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/scott/.claude/helpers/graft-hooks.cjs\" stop",
+            "timeout": 8000
           }
         ]
       }
@@ -94,6 +130,26 @@
           {
             "type": "command",
             "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && SUPERSET_HOOK_HARNESS=claude \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/scott/.claude/helpers/graft-hooks.cjs\" post-edit",
+            "timeout": 10000
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|mcp__graft__|mcp__trail__|Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/scott/.claude/helpers/graft-hooks.cjs\" tool-savings",
+            "timeout": 8000
           }
         ]
       }
@@ -140,7 +196,8 @@
     "andrej-karpathy-skills@karpathy-skills": true,
     "ponytail@ponytail": true,
     "mattpocock-skills@claude-plugins-official": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "swift-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "karpathy-skills": {
