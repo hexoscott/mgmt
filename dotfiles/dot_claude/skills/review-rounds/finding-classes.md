@@ -22,6 +22,14 @@ The dominant class, and the one that lets everything else through. Variants:
   arrived. Passes alone, fails under full-suite load, on a different test each
   run.
 
+- **One member of a set tested.** A status list where only one member has a
+  case, a filter tested on one of two sibling counts, one field of a payload
+  asserted. Each untested member survives on its own, and they turn up one
+  per round.
+- **Coinciding fixture values.** Every category has a count of 1, or orders,
+  jobs and works orders share ids in a fresh test DB, so a mutant that
+  confuses them gives the same answer.
+
 Find these by mutation: delete or invert the code the test covers and confirm
 the test goes red.
 
