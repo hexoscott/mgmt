@@ -21,6 +21,7 @@ with tempfile.TemporaryDirectory() as temporary:
         ".claude/CLAUDE.md": "Instructions\n",
         ".claude/skills/example/SKILL.md": "Claude skill\n",
         ".codex/config.toml": "# repo\n",
+        ".codex/hooks.json": '{"hooks": {}}\n',
         ".codex/skills/example/SKILL.md": "Codex skill\n",
         ".pi/agent/settings.json": "{}\n",
         ".pi/agent/models.json": "{}\n",
