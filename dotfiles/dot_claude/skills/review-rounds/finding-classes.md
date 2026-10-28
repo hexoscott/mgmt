@@ -103,3 +103,28 @@ Two screens or handlers that do the same job (receive, goods-in, produce)
 copy each other's patterns: a form lock, a double-tap guard, an async picker
 that can resolve stale. A fix to one flow leaves the defect in the others.
 Name every sibling flow and check each one for the pattern.
+
+## 10. Classifiers matched on text
+
+A regex, error wording or keyword list that sorts inputs into classes (the
+provider's fault or the issue's, transient or fatal) is fixed one wording per
+round: each fix adds the wording just seen, and the next run sees another, or
+the new pattern over-matches a sibling class. Collect every real sample you
+can (captured CLI output, logged errors, provider docs) into one table test,
+each sample asserted in its class and not in any other. When an unseen
+wording would be misread, choose the default that fails safe and say which.
+
+## 11. State a fix introduces
+
+A fix that adds a record, flag, map entry or counter brings a lifecycle with
+it. Check each one:
+
+- **cleared**: what removes it, and does every exit path reach that, including
+  the path that succeeds for another reason?
+- **lifetime**: does it survive the process boundary the behaviour needs
+  (scheduled runs, restarts), or does an in-memory value vanish between runs?
+- **steady state**: under constant inflow, does anything it demotes, holds or
+  defers ever run again, or does it starve, hold every slot, or invert
+  priority?
+- **who can steer it**: can untrusted input (an issue body, agent output) set
+  it, and what does that buy them?
