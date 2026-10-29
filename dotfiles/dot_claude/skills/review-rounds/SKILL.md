@@ -50,6 +50,19 @@ this skill and the ledger before the next dispatch.
 Test gaps and minors are fixed inside the round that found them, or deferred
 with a reason. They never cost a round of their own.
 
+## First pass: my-review
+
+Before round 1's dispatch, resolve the scope and write the invariants and
+changed terms into the ledger as described in step 1 below. Then read and run
+[my-review](../my-review/SKILL.md) once over that exact scope. This is the first
+review pass, before specialist reviewers or mutation work.
+
+Record its findings and coverage limits in the ledger, triage them using step
+3, and carry their dispositions into every reviewer brief. Apply authorized
+fixes through step 4; unresolved findings stay open for round 1. Do not repeat
+this pass for fixes, drains, or confirmation rounds. A new scope mid-run gets
+its own first pass. A clean first pass does not satisfy the gate.
+
 ## A round
 
 Every round runs the same five steps. Round 1 sweeps the whole scope; later
@@ -85,9 +98,8 @@ one message so they run in parallel:
   for each.
 - **Standards reviewer**: every file in the repo that documents how code is
   written (`CLAUDE.md`, `AGENTS.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md`),
-  plus the Fowler smell baseline from mattpocock's `code-review` skill (step 3,
-  at `~/.claude/plugins/cache/*/mattpocock-skills/*/skills/engineering/code-review/SKILL.md`)
-  when installed. The repo's standard overrides the baseline; smells are
+  plus the Fowler smell baseline in [my-review](../my-review/SKILL.md),
+  step 3. The repo's standard overrides the baseline; smells are
   judgement calls and always minor; skip what tooling enforces.
 - **Codex adversarial reviewer**, round 1 only, when the codex plugin is
   installed: a challenge to the approach itself (design choices, assumptions,
