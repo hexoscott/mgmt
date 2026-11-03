@@ -81,6 +81,9 @@ trust_level = "trusted"
 [projects."/Users/scott/src/hexoscott/guestbook"]
 trust_level = "trusted"
 
+[projects."/Users/scott/src/hexoscott/code-factory"]
+trust_level = "trusted"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 
@@ -166,35 +169,39 @@ enabled = true
 [hooks.state]
 
 [hooks.state."/Users/scott/.codex/hooks.json:session_start:0:0"]
-trusted_hash = "sha256:ef4bc30f02e63509fea82418a4b80d00b74de5ce660a3ace0f53491ba46158fc"
-
+enabled = true
+trusted_hash = "sha256:d853ef9fbaf2ff5c8504bf2463675664aaf29a8016c6a35293a6ddc053b4f030"
 [hooks.state."/Users/scott/.codex/hooks.json:pre_tool_use:0:0"]
-trusted_hash = "sha256:89353540103d18934f6410dcd87e6005696acbe38f5342ea043a8a1e5dcb2483"
-
+enabled = true
+trusted_hash = "sha256:33153c88ce09e9a5b899b9cb33dd23382be394a3e1cdb421e44e0b3778e8bdf2"
 [hooks.state."/Users/scott/.codex/hooks.json:post_tool_use:0:0"]
-trusted_hash = "sha256:028844309c28a0a07e88395b3fd08c0ffd8536ca382f0303736cc7b9f38162c6"
-
-[hooks.state."/Users/scott/.codex/hooks.json:session_start:1:0"]
-trusted_hash = "sha256:05e6d8b7a037032726008b8c9d46f0398e327ae18bd9ea826745ab2de0beb96b"
-
+enabled = true
+trusted_hash = "sha256:a452131ceaecacb08404d1a8d49d85315fdf109905d152859c32b538c9002f93"
 [hooks.state."/Users/scott/.codex/hooks.json:session_end:0:0"]
 trusted_hash = "sha256:36fdd601223a5a470a5a4b69a03d6a51b361e8cb8a503475f914be33ed19d6a6"
 
 [hooks.state."/Users/scott/.codex/hooks.json:user_prompt_submit:0:0"]
-trusted_hash = "sha256:ff4c98b3095aaba47057475efe3594fd7b03851788941df8ff5f3e2e2c321c19"
-
+enabled = true
+trusted_hash = "sha256:5383e8af0fe09d96df4e6d0f5f3edaec15485d6162a1a749b5c69e7242eb0478"
 [hooks.state."/Users/scott/.codex/hooks.json:subagent_start:0:0"]
-trusted_hash = "sha256:b3d65f071b7424ab463f30c0ec8efa47c7f830fb05a8557f43f26cfc9cee43e2"
-
+enabled = true
+trusted_hash = "sha256:269737162a0cf2b29b3e40df23411c02a8bbdeb5f471243c924dac116624cdcf"
 [hooks.state."/Users/scott/.codex/hooks.json:subagent_stop:0:0"]
-trusted_hash = "sha256:36d497a06533f3949e71f1c15d0a1eeae4d94515e8ac1e1a2378d8db7b67a325"
-
+enabled = true
+trusted_hash = "sha256:62ff9ef7fcca3784011e955f35ee3612b11168b2f62bd772f08adefb918d34be"
 [hooks.state."/Users/scott/.codex/hooks.json:stop:0:0"]
-trusted_hash = "sha256:6bdd9f3772d9f855176eb3e55690e0a548255b45aa31ba549444dbde5308dca5"
-
+enabled = true
+trusted_hash = "sha256:1ae8ee19d95298f7bc4821368a7d4600b9f9d36c68695812c19419b28b5ad53e"
 [hooks.state."/Users/scott/.codex/hooks.json:interrupt:0:0"]
-trusted_hash = "sha256:3321c4e8bd20dfe46dff6362e467cd648982b6dea825af82253cf8f30a980c46"
+enabled = true
+trusted_hash = "sha256:78b430d1d7794c49e6d83a36964d4082d05ec72023ccc38244e97b8e08d054d2"
 
+[hooks.state."/Users/scott/.codex/hooks.json:permission_request:0:0"]
+enabled = true
+trusted_hash = "sha256:bd2c29369e47a438a3f2c1c18896d7bd86ce58c0eb5542f1c3b879e427f92fc9"
+
+[hooks.state."/Users/scott/.codex/hooks.json:session_start:1:0"]
+trusted_hash = "sha256:ef4bc30f02e63509fea82418a4b80d00b74de5ce660a3ace0f53491ba46158fc"
 [features]
 hooks = true
 js_repl = false
@@ -207,38 +214,20 @@ dock-icon-preference = "codex-system"
 keepRemoteControlAwakeWhilePluggedIn = true
 conversationDetailMode = "STEPS_PROSE"
 
-[hooks.state."/Users/scott/.codex/hooks.json:session_start:2:0"]
-enabled = true
-trusted_hash = "sha256:d853ef9fbaf2ff5c8504bf2463675664aaf29a8016c6a35293a6ddc053b4f030"
+[projects."/Users/scott/orca/workspaces/guestbook/per-site-visitor-questions"]
+trust_level = "trusted"
 
-[hooks.state."/Users/scott/.codex/hooks.json:user_prompt_submit:1:0"]
-enabled = true
-trusted_hash = "sha256:5383e8af0fe09d96df4e6d0f5f3edaec15485d6162a1a749b5c69e7242eb0478"
+[projects."/Users/scott/orca/workspaces/tessera/ignored-advisory-ghsa-gcqx-w48m-w2h4-deepmerge-v"]
+trust_level = "trusted"
 
-[hooks.state."/Users/scott/.codex/hooks.json:pre_tool_use:1:0"]
-enabled = true
-trusted_hash = "sha256:33153c88ce09e9a5b899b9cb33dd23382be394a3e1cdb421e44e0b3778e8bdf2"
+[projects."/Users/scott/orca/workspaces/domain-chaser/check-limits"]
+trust_level = "trusted"
 
-[hooks.state."/Users/scott/.codex/hooks.json:permission_request:0:0"]
-enabled = true
-trusted_hash = "sha256:bd2c29369e47a438a3f2c1c18896d7bd86ce58c0eb5542f1c3b879e427f92fc9"
+[projects."/Users/scott/orca/workspaces/tessera/production-guards"]
+trust_level = "trusted"
 
-[hooks.state."/Users/scott/.codex/hooks.json:post_tool_use:1:0"]
-enabled = true
-trusted_hash = "sha256:a452131ceaecacb08404d1a8d49d85315fdf109905d152859c32b538c9002f93"
+[projects."/Users/scott/orca/workspaces/tessera/security-hardening-left-from-the-founding-design"]
+trust_level = "trusted"
 
-[hooks.state."/Users/scott/.codex/hooks.json:subagent_start:1:0"]
-enabled = true
-trusted_hash = "sha256:269737162a0cf2b29b3e40df23411c02a8bbdeb5f471243c924dac116624cdcf"
-
-[hooks.state."/Users/scott/.codex/hooks.json:subagent_stop:1:0"]
-enabled = true
-trusted_hash = "sha256:62ff9ef7fcca3784011e955f35ee3612b11168b2f62bd772f08adefb918d34be"
-
-[hooks.state."/Users/scott/.codex/hooks.json:stop:1:0"]
-enabled = true
-trusted_hash = "sha256:1ae8ee19d95298f7bc4821368a7d4600b9f9d36c68695812c19419b28b5ad53e"
-
-[hooks.state."/Users/scott/.codex/hooks.json:interrupt:1:0"]
-enabled = true
-trusted_hash = "sha256:78b430d1d7794c49e6d83a36964d4082d05ec72023ccc38244e97b8e08d054d2"
+[projects."/Users/scott/orca/workspaces/tessera/proof-of-delivery-outcomes-other-than-delivered"]
+trust_level = "trusted"
