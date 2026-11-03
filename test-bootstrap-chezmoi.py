@@ -20,6 +20,9 @@ with tempfile.TemporaryDirectory() as temporary:
         ".claude/settings.json": "{}\n",
         ".claude/CLAUDE.md": "Instructions\n",
         ".claude/skills/example/SKILL.md": "Claude skill\n",
+        ".claude/skills/synced/example/useful/SKILL.md": "Synced skill\n",
+        ".claude/skills/synced/example/useful/scripts/read.py": "print('resource')\n",
+        ".claude/skills/synced/example/manifest.json": "{}\n",
         ".codex/config.toml": "# repo\n",
         ".codex/hooks.json": '{"hooks": {}}\n',
         ".codex/skills/example/SKILL.md": "Codex skill\n",
@@ -31,6 +34,11 @@ with tempfile.TemporaryDirectory() as temporary:
         path = source / name.replace(".", "dot_", 1)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)
+    shutil.copyfile(Path(__file__).with_name("dotfiles") / ".chezmoiignore", source / ".chezmoiignore")
+    progress = Path(".claude/skills/synced/example/.last-complete-round")
+    progress_source = source / "dot_claude/skills/synced/example/dot_last-complete-round"
+    progress_source.parent.mkdir(parents=True, exist_ok=True)
+    progress_source.write_text("source marker\n")
     (source / "dot_unrelated").write_text("repo-owned\n")
     env = {**os.environ, "HOME": str(home), "XDG_CONFIG_HOME": str(home / ".config"),
            "XDG_CACHE_HOME": str(home / ".cache"), "XDG_DATA_HOME": str(home / ".local/share")}
@@ -39,6 +47,9 @@ with tempfile.TemporaryDirectory() as temporary:
         subprocess.run(["bash", str(target)], env=env, check=True, capture_output=True)
 
     run()  # Fresh machine: missing directories and files are installed.
+    assert not (home / progress).exists(), "runtime progress must not be installed"
+    (home / progress).parent.mkdir(parents=True, exist_ok=True)
+    (home / progress).write_text("local marker\n")
     for name, content in files.items():
         assert (home / name).read_text() == content
         (home / name).write_text(content + "\n")
@@ -59,6 +70,8 @@ with tempfile.TemporaryDirectory() as temporary:
     assert not (source / "dot_pi/agent/auth.json").exists()
     assert not (source / "dot_pi/agent/sessions").exists()
     assert (home / ".unrelated").read_text() == "updated repo-owned\n"
+    assert progress_source.read_text() == "source marker\n", "re-add must ignore runtime progress"
+    assert (home / progress).read_text() == "local marker\n", "apply must preserve runtime progress"
 
     (home / ".claude/CLAUDE.md").write_text("Synced alone\n")
     run(sync_script)  # Sync runs standalone and only copies home edits into the repo.
