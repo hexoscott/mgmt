@@ -227,7 +227,6 @@
     "security-guidance@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "andrej-karpathy-skills@karpathy-skills": true,
-    "ponytail@ponytail": true,
     "mattpocock-skills@claude-plugins-official": true,
     "codex@openai-codex": true,
     "swift-lsp@claude-plugins-official": true
@@ -237,12 +236,6 @@
       "source": {
         "source": "github",
         "repo": "forrestchang/andrej-karpathy-skills"
-      }
-    },
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
       }
     },
     "openai-codex": {
