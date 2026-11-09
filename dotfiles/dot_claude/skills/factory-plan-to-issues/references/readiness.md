@@ -15,13 +15,14 @@ before long briefs; reconcile it after scope, contract or dependency changes.
   "issues": [
     {
       "id": "CI",
+      "wave": 1,
       "owns": ["R-CI"],
       "provides": ["required-pr-checks"],
       "protects": ["EXPORT"]
     },
     {
       "id": "EXPORT",
-      "blocked_by": ["CI"],
+      "wave": 2,
       "owns": ["R-EXPORT"],
       "requires": ["tenant-store", "required-pr-checks"],
       "provides": ["streamed-csv"]
@@ -33,14 +34,20 @@ before long briefs; reconcile it after scope, contract or dependency changes.
 - `baseline`: capability ID → concrete evidence that the contract already holds.
 - `requirements`: all atomic obligation IDs in the approved scope. Keep source-story
   mapping and final integration verifiers in the spec/briefs when splitting stories.
-- Each issue needs an `id`. All list fields default to empty lists.
+- Each issue needs an `id` and a `wave`. All list fields default to empty lists.
   Human/investigation gates use the same graph identities; their bodies
   state who resolves them and keep them outside the implementation queue.
+- `wave`: a positive integer. Wave 1 starts from the baseline. A later-wave issue
+  is published once its producers have merged and its gates are done. No issue
+  consumes from, or is gated by, an issue in its own wave. Merged issues stay in
+  plan.json at their wave; their merge evidence goes in the consuming briefs and
+  the plan record, not in `baseline`. There is no `blocked_by` field.
 - `owns`: obligations this ticket can actually deliver, each with one owner.
 - `provides` / `requires`: stable capability IDs, defined concretely in the bodies.
   A materially changed contract needs a distinct ID from its baseline predecessor.
-  Inputs must come from baseline, this ticket, or its completed blocker ancestry.
-- `protects`: issue IDs for work that must not execute before this gate completes.
+  Inputs must come from baseline, this ticket, or an issue in an earlier wave.
+- `protects`: issue IDs for work that must not execute before this gate completes;
+  the gate sits in an earlier wave than each of them.
   Check its intended coverage against the spec; leaving a protected issue out of
   this list must not silently evade the guard. Existing protection can instead be
   a baseline capability required by the relevant issues.
@@ -52,9 +59,10 @@ uses only the standard library and reads files without changing them:
 python3 /path/to/factory-plan-to-issues/scripts/check_plan.py plans/effort/plan.json
 ```
 
-It rejects unknown/cyclic dependencies, overlapping capability providers, missing
-or duplicate requirement owners, missing producer ancestry and late protective
-gates. Passing means only that the declared graph is internally consistent. It
+It rejects `blocked_by` fields, missing or invalid waves, overlapping capability
+providers, missing or duplicate requirement owners, inputs from the same or a
+later wave, and gates not in an earlier wave than the work they protect. Passing
+means only that the declared graph is internally consistent. It
 cannot infer omitted inputs, judge scope/contract content or prove runtime fit.
 
 ## Planner's failure check
@@ -86,20 +94,22 @@ do not delegate further or publish anything as part of this check.
 
 The review must verify:
 
-1. **Worker closure.** For each ticket, begin with its body and declared producer
-   outputs. Can a worker finish without inventing decisions, fetching inaccessible
+1. **Worker closure.** For each ticket, begin with its body, the baseline and the
+   merged outputs of earlier waves. Can a worker finish without inventing decisions,
+   waiting on an open sibling, fetching inaccessible
    context or implementing a sibling? Verify the actual consumed behaviour, not just
    matching capability names. A graph/table entry is not proof of delivery.
 2. **Coverage.** Compare against approved source, including units and failure cases.
    Every obligation has one actual delivery owner; compound stories have explicit
    parts and a final verifier whose prerequisites supply them.
-3. **Concurrency.** Enumerate pairs with neither in the other's ancestry. Check
-   shared contracts, schema/migrations, generated files, caller changes and semantic
-   side effects. For overlap, identify disjoint edits and a deterministic resolution,
-   combine the work or add justified ordering. Shared filenames alone are insufficient.
-4. **Gates and intermediate states.** Simulate the runnable frontier through the
-   graph. Verify that CI, isolation, authorisation and other required protections
-   precede the work they guard. Separate early bootstrap from later launch automation.
+3. **Concurrency.** Enumerate every pair of issues in the same wave. Check shared
+   contracts, schema/migrations, generated files, caller changes and semantic side
+   effects. For overlap, identify disjoint edits and a deterministic resolution,
+   combine the work or move one to a later wave. Shared filenames alone are
+   insufficient; a textual merge conflict alone is acceptable.
+4. **Gates and intermediate states.** Simulate the waves in order. Verify that CI,
+   isolation, authorisation and other required protections land in an earlier wave
+   than the work they guard. Separate early bootstrap from later launch automation.
    Each merged state must satisfy its declared invariants; live activation and offline
    implementation may have different prerequisites.
 5. **Failure consistency.** Challenge the cross-ticket promises above against source

@@ -1,13 +1,16 @@
 ---
 name: factory-plan-to-issues
-description: Investigate a substantial codebase change, record decisions, and produce a spec and cohesive GitHub issues with verified dependencies; also audit readiness of an existing spec or ticket set. Use for planning unattended agent work across features or migrations, not implementing tickets.
+description: Investigate a substantial codebase change, record decisions, and produce a spec and large, independently startable GitHub issues ordered in waves; also audit readiness of an existing spec or ticket set. Use when a change is too large for one long session and parts should run in parallel, not for implementing tickets.
 ---
 
 # Factory plan to issues
 
 Produce a plan another agent can execute without reconstructing the conversation.
-Prefer fewer, cohesive implementation issues. A larger issue earns its size by
-keeping one responsibility together, not by collecting unrelated features.
+Prefer fewer, larger implementation issues, each sized for one long implementation
+session. A larger issue earns its size by keeping one responsibility together, not
+by collecting unrelated features. Every published implementation issue is
+**isolated**: it starts from the target branch alone and never waits on another
+open issue. Merge conflicts between isolated issues are expected and acceptable.
 
 For an existing plan, resume at the first missing stage. If asked only to check
 readiness, start at step 5 without regenerating tickets or repeating interviews.
@@ -97,35 +100,45 @@ logic, callers, API/UI, tests and necessary documentation for a capability toget
 where they form one verifiable change. Use internal checklists for implementation
 steps rather than making every step another issue.
 
-Split when distinct responsibilities can land and be verified independently, or a
-ticket would exceed the runner's practical implementation/review limits. Do not
-size by lines, hours invented without evidence, or a fixed ticket count. A context
-window limit alone does not establish a good responsibility boundary.
+Split only where both parts start from the same baseline, neither consumes the
+other's output, and each delivers a verifiable outcome alone; or where one ticket
+would exceed the runner's practical implementation/review limits. Do not size by
+lines, hours invented without evidence, or a fixed ticket count. A context window
+limit alone does not establish a good responsibility boundary.
 
 Give each atomic requirement one delivery owner. Split a compound story into
 separate obligations when different tickets supply its parts, retaining its source
 story ID and a named final integration verifier. An owner must be able to complete
-its obligation from its own work and merged prerequisites; an ID in an index is
-not evidence of delivery. Assign shared contract/schema
-changes and migrations an explicit owner. Keep a needed preparatory refactor with
-its first consumer unless it is a useful, independently verifiable prerequisite.
+its obligation from its own work and its baseline, which includes earlier waves
+once merged; an ID in an index is not evidence of delivery. Assign shared
+contract/schema changes and migrations an explicit owner. Keep a needed preparatory
+refactor with its first consumer unless it earns an earlier wave of its own.
 
 For every consumed capability, establish exactly one of:
 
 1. It already exists on the baseline, with evidence.
 2. This issue implements it completely.
-3. Another named issue supplies it, with a precise output contract and a dependency.
+3. An issue in an earlier wave supplies it, with a precise output contract.
 
-Classify every inter-issue reference as **prerequisite**, **merge ordering**, or
-**context only**. Prerequisites and merge-order constraints become native blockers.
-Specify what must be merged and verified before the consumer starts; a PR or an
-issue closed without its promised output is not sufficient evidence.
+**Waves.** Wave 1 is every issue that starts from the baseline. An issue that
+consumes another issue's output, or needs a gate (human setup, CI bootstrap) to
+hold first, belongs in a later wave than that producer or gate. First try merging
+a consumer into its producer; keep it separate only when the combined issue would
+exceed the runner's practical limits. Work never merges into the gate that
+protects it. Aim for one wave; a third wave needs a stated reason. Every
+inter-issue reference is either a wave prerequisite or context only. Issues in
+the same wave have no merge order: whichever merges second resolves conflicts.
+Publish a later-wave issue only after every producer it consumes has merged and
+every gate protecting it is done, each verified on the target branch; a closed
+issue or PR is not that evidence. Then re-ground its draft against the merged code,
+citing that evidence in its brief, and repeat step 5 on it before publishing.
 
 Before expanding ticket prose, write the compact capability/ownership ledger in
 [the readiness protocol](references/readiness.md) and run its checker. Record
-provided/required capabilities and which work each gate protects. A gate protecting
-implementation must hold on the baseline or precede that work, even if a human
-must deliver it. Do not defer required PR checks to a final release-workflow issue.
+provided/required capabilities, each issue's wave and which work each gate
+protects. A gate protecting implementation must hold on the baseline or sit in an
+earlier wave than that work, even if a human must deliver it. Do not defer
+required PR checks to a final release-workflow issue.
 Review this first graph and consequential questions before drafting long bodies;
 ask the user only where an answer or scope approval is actually missing.
 
@@ -133,7 +146,7 @@ Audit overlap by changed behaviour and shared symbols, not just filenames. Two
 additive routes can coexist in one router. Two rewrites of tenant resolution cannot
 be assumed independent. For unavoidable overlap, state the owner, the disjoint edit
 boundaries, and the deterministic merge/regeneration steps. If resolution requires
-a fresh design decision, combine the work or order it with a blocker. Do not promise
+a fresh design decision, combine the work or move one into a later wave. Do not promise
 conflict-free rebases or make correctness depend on another worker's open branch.
 
 Keep each ticket green when merged into the target branch. For migrations, use
@@ -152,15 +165,17 @@ skill the user must remember to invoke. The checker cannot establish whether the
 ledger omitted a capability or the prose contradicts the spec; the reviewer must
 read actual source, contracts and acceptance criteria.
 
-Remove needless edges, not real constraints. Merge cycles that represent one
-responsibility; otherwise recut the contracts and re-audit. Resolve defects in the
+Remove needless wave prerequisites, not real constraints. Merge issues that need
+each other's output and represent one responsibility; otherwise recut the contracts
+or move the consumer to a later wave, and re-audit. Resolve defects in the
 spec and draft bodies, not by accumulating corrective comments.
 Repair confirmed findings and have the reviewer recheck the affected contracts and
 dependants. Record ready/held status per issue and unresolved execution blockers.
 If independent review is unavailable, keep the result a draft and state that limit.
 
 Present the concrete spec and issue map together: title, outcome, owned area,
-blockers with reasons, concurrency and remaining gates. Invite corrections about
+wave with the reason for any wave after the first, concurrency and remaining gates.
+Invite corrections about
 scope and granularity. If approval of this scope/publication is still needed, ask
 here, after drafts are reviewable; honour approval already given. Do not release
 affected tickets while a consequential user decision remains unanswered.
@@ -171,9 +186,11 @@ For GitHub, follow [publication and runner checks](references/github.md). A requ
 to design this workflow alone does not authorise publishing issues in another repo.
 Without publication authority, leave complete local drafts and report that boundary.
 
-After publication, report the spec, issues, actual blocker graph, runnable frontier,
-manual gates and anything not verified. On later changes, update the canonical spec,
-affected issue bodies and native edges together; reconcile already-implemented work
+Publish one wave at a time; later waves stay local drafts. After publication,
+report the spec, the published wave, held later-wave drafts, manual gates and
+anything not verified. When a wave has merged, promote the next per step 4's
+**Waves**. On later changes, update the canonical spec, affected issue bodies and
+plan.json together; reconcile already-implemented work
 before changing ownership. Do not hide a prerequisite in a comment or silently widen
 an in-flight issue. Pause affected queued work through the runner's supported gate
 when a changed plan would otherwise let it start incorrectly.

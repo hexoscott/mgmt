@@ -1,8 +1,8 @@
 # GitHub publication and runner checks
 
-Use an available GitHub integration or `gh`; native dependencies are required for
-a runner that schedules from them. Body mentions, checklists, sub-issue links and
-project status fields do not substitute for dependency edges.
+Use an available GitHub integration or `gh`. Publish one wave at a time; later
+waves stay local drafts, so no published implementation issue needs a native
+blocker or waits on another open issue.
 
 Inspect the project's existing labels and automation before publishing. Do not
 invent an activation label or modify the runner as part of planning. Distinguish
@@ -16,47 +16,44 @@ permission to publish draft issues from permission to enqueue unattended executi
    drafts stable effort-local keys; record any existing matching issue URLs.
 2. Create or update the spec/index without execution labels. Keep it out of the
    implementation queue: its role is reference and progress, not a second build.
-3. Create implementation issues **without runner eligibility**. Save each resulting
-   repository, number, database ID and URL immediately in the publication record.
-   For retries after an uncertain response, search/read back before creating again.
+3. Create the current wave's implementation issues **without runner eligibility**.
+   Save each resulting repository, number and URL immediately in the publication
+   record. For retries after an uncertain response, search/read back before
+   creating again.
 4. Replace local references with real links and attach sub-issues where supported.
-   Add the intended native blockers; their direction is consumer blocked by producer.
-   Preserve unrelated pre-existing relationships on reused issues and reconcile any
-   unexpected edge before release. Do not close superseded existing issues without
-   authority to do so.
-5. Read back complete bodies, labels, parent links and **all pages** of blockers.
-   Compare the actual edge set with the intended graph, including unexpected edges;
-   verify no cycles and check the runnable frontier against the plan. Check closed
-   external prerequisites actually delivered their promised output to the target
-   branch; investigate cancellation or missing implementation.
-6. Only after the whole graph passes, enable the approved implementation issues for
-   the runner, if enqueueing is authorised. Blocked issues may be eligible when the
-   runner demonstrably honours their edges. Leave human/setup/unknown-contract work
-   ineligible. If a manual task truly gates implementation, give it a non-runner
-   issue and make it a native blocker; a deployment-only gate need not hold offline
-   implementation. Re-read final labels and report which issues are now runnable.
+   Preserve unrelated pre-existing relationships on reused issues; a reused issue
+   with an open blocker is not isolated, so settle it with the user before release.
+   Do not close superseded existing issues without authority to do so.
+5. Read back complete bodies, labels, parent links and **all pages** of each
+   issue's blockers. Every published implementation issue has no open blocker.
+   Check that every earlier-wave output it consumes is merged and every gate
+   protecting it is done, each verified on the target branch; investigate
+   cancellation or missing implementation.
+6. Only after every published issue passes, enable the approved implementation
+   issues for the runner, if enqueueing is authorised. Leave
+   human/setup/unknown-contract work ineligible. A gate gets an issue in an earlier
+   wave, a non-runner issue when a human must do it; the work it protects stays
+   unpublished until the gate is done and verified. A deployment-only gate
+   need not hold offline implementation. Re-read final labels and report which
+   issues are now runnable.
 
 On partial failure, stop activation, record what succeeded and what remains, and
-resume by reconciling those real issues. Do not claim publication is complete or
-fall back to prose blockers for a runner that ignores them. When updating existing
-eligible issues, first use the runner's supported hold/stop mechanism for affected
-work; account for already-running workers before changing their contracts.
+resume by reconciling those real issues. Do not claim publication is complete.
+When updating existing eligible issues, first use the runner's supported hold/stop
+mechanism for affected work; account for already-running workers before changing
+their contracts.
 
-## GitHub dependency mechanics
+## GitHub mechanics
 
 These are operation shapes; resolve the repository and real identifiers first.
 Use structured integration arguments, or files with `--body-file` for multiline
-bodies. Do not interpolate untrusted prose into shell commands.
+bodies. Do not interpolate untrusted prose into shell commands. To confirm an
+issue has no open blocker (see
+[GitHub's dependency API](https://docs.github.com/en/rest/issues/issue-dependencies)):
 
 ```sh
-gh api repos/OWNER/REPO/issues/BLOCKER_NUMBER --jq '{id,number,state,html_url}'
-gh api --method POST repos/OWNER/REPO/issues/CONSUMER_NUMBER/dependencies/blocked_by -F issue_id=BLOCKER_DATABASE_ID
-gh api --paginate repos/OWNER/REPO/issues/CONSUMER_NUMBER/dependencies/blocked_by --jq '.[] | {id,number,state,html_url}'
+gh api --paginate repos/OWNER/REPO/issues/NUMBER/dependencies/blocked_by --jq '.[] | select(.state == "open") | {number,html_url}'
 ```
-
-The numeric `issue_id` is the blocker's database ID, distinct from its issue
-number and GraphQL node ID. An HTTP success is not the dependency audit: compare
-read-back results. See [GitHub's dependency API](https://docs.github.com/en/rest/issues/issue-dependencies).
 
 ## Scott's Code Factory
 

@@ -1,6 +1,5 @@
 import argparse
 from collections import defaultdict
-from graphlib import CycleError, TopologicalSorter
 import json
 from pathlib import Path
 import sys
@@ -11,6 +10,12 @@ def string_list(value, label):
         raise ValueError(f"{label} must be a list of nonempty identifiers")
     if len(value) != len(set(value)):
         raise ValueError(f"{label} contains duplicate identifiers")
+    return value
+
+
+def wave_number(value, key):
+    if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+        raise ValueError(f"{key}.wave must be a positive integer")
     return value
 
 
@@ -33,32 +38,23 @@ def validate(plan):
         if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"].strip():
             raise ValueError("each issue needs a nonempty id")
         key = row["id"]
+        if "blocked_by" in row:
+            raise ValueError(f"{key}.blocked_by is replaced by wave: put each prerequisite in an earlier wave")
         if key in issues:
             errors.append(f"duplicate issue {key}")
         issues[key] = {
-            field: string_list(row.get(field, []), f"{key}.{field}")
-            for field in ("blocked_by", "owns", "provides", "requires", "protects")
+            "wave": wave_number(row.get("wave"), key),
+            **{
+                field: string_list(row.get(field, []), f"{key}.{field}")
+                for field in ("owns", "provides", "requires", "protects")
+            },
         }
     for key, row in issues.items():
-        for blocker in row["blocked_by"]:
-            if blocker not in issues:
-                errors.append(f"{key}: unknown blocker {blocker}")
         for protected in row["protects"]:
             if protected not in issues:
                 errors.append(f"{key}: unknown protected issue {protected}")
     if errors:
         return errors
-
-    graph = {key: set(row["blocked_by"]) for key, row in issues.items()}
-    try:
-        order = list(TopologicalSorter(graph).static_order())
-    except CycleError as exc:
-        return [f"dependency cycle: {' -> '.join(exc.args[1])}"]
-    ancestors = {}
-    for key in order:
-        ancestors[key] = set()
-        for parent in graph[key]:
-            ancestors[key].update(ancestors[parent] | {parent})
 
     providers = {capability: None for capability in baseline}
     owners = defaultdict(list)
@@ -84,16 +80,19 @@ def validate(plan):
                 errors.append(f"{key}: no provider for {capability}")
             else:
                 producer = providers[capability]
-                if producer is not None and producer != key and producer not in ancestors[key]:
-                    errors.append(f"{key}: requires {capability} from {producer}, absent from blocker ancestry")
+                if producer is not None and producer != key and issues[producer]["wave"] >= row["wave"]:
+                    errors.append(
+                        f"{key} (wave {row['wave']}): requires {capability} from {producer} "
+                        f"(wave {issues[producer]['wave']}); merge the issues or move {key} to a later wave"
+                    )
         for protected in row["protects"]:
-            if key not in ancestors[protected]:
-                errors.append(f"{key}: gate must precede {protected}")
+            if issues[protected]["wave"] <= row["wave"]:
+                errors.append(f"{key}: gate must be in an earlier wave than {protected}")
     return errors
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Check declared plan ownership, capability dependencies and gates.")
+    parser = argparse.ArgumentParser(description="Check declared plan ownership, wave-ordered capabilities and gates.")
     parser.add_argument("plan", type=Path)
     args = parser.parse_args()
     try:
