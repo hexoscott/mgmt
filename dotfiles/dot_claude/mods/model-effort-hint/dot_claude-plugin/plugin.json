@@ -1,0 +1,6 @@
+{
+  "name": "model-effort-hint",
+  "version": "0.1.0",
+  "description": "Shows the current model and effort level on the hint line under the prompt",
+  "types": "./types/index.d.ts"
+}

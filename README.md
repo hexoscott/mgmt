@@ -58,6 +58,14 @@ new skills) are not imported; add new skills explicitly with `chezmoi add`.
 Missing files are installed from the repo on a fresh machine.
 Direct `chezmoi apply` or `chezmoi update` bypasses this sync step.
 
+## Claude Code mods
+
+Mods (hooks plugins) live in `dotfiles/dot_claude/mods/<name>/` and apply to
+`~/.claude/mods/<name>/`. Each one loads in every session because its folder is
+listed in `CLAUDE_CODE_PLUGIN_DIRS` in the `env` block of
+`dot_claude/settings.json`: a `:`-separated list, so add a new mod's path there.
+Run `claude plugin test ~/.claude/mods/<name>` to test one.
+
 ## devmux
 
 `devmux` is a chezmoi-managed tmux workspace launcher at `~/.local/bin/devmux`.

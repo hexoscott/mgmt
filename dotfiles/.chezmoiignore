@@ -1,2 +1,6 @@
 # Claude's generated skill-sync progress is local runtime state.
 .claude/skills/synced/**/.last-complete-round
+
+# Claude Code writes each mod's API typings on load; regenerated, not source.
+.claude/mods/*/.claude-plugin/types
+.claude/mods/*/.claude-plugin/types/**
