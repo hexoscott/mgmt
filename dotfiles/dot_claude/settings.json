@@ -255,7 +255,7 @@
     "code-simplifier@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
-    "andrej-karpathy-skills@karpathy-skills": true,
+    "andrej-karpathy-skills@karpathy-skills": false,
     "mattpocock-skills@claude-plugins-official": true,
     "codex@openai-codex": true,
     "swift-lsp@claude-plugins-official": true
